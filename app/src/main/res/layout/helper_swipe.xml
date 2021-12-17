@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#9F000000"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/lr_hand"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:src="@drawable/lr_hand"
+            android:layout_above="@id/helper_text"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@null"/>
+        <TextView
+            android:id="@+id/helper_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/swipe_helper"
+            android:textSize="@dimen/content"
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dismiss"
+            android:textSize="@dimen/content"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:paddingBottom="30dp"/>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/full_layout_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/menu_helper_desc"/>
+
+</FrameLayout>

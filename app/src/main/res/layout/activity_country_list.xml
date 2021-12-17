@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context=".CountriesFragment"
+    android:background="@color/background"
+    android:id="@+id/mainCountries">
+
+    <ImageView
+        android:id="@+id/background"
+        android:alpha="0.2"
+        android:layout_width="1000dp"
+        android:layout_height="match_parent"
+        android:scrollX="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/map_outline"
+        android:contentDescription="@null"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="50dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/cancelView"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:id="@+id/cancel"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_cancel_black_24dp"
+                android:layout_centerHorizontal="true"
+                android:tint="@color/background_tint"
+                android:contentDescription="@string/cancel_desc" />
+
+            <TextView
+                android:id="@+id/cancelText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cancel"
+                android:textSize="@dimen/button_name_font_size"
+                android:text="@string/cancel"
+                android:textColor="@color/background_tint"
+                android:layout_centerHorizontal="true"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/saveView"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:id="@+id/save"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_save_black_24dp"
+                android:layout_centerHorizontal="true"
+                android:tint="@color/background_tint"
+                android:contentDescription="@string/save_desc" />
+
+            <TextView
+                android:id="@+id/saveText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/save"
+                android:textSize="@dimen/button_name_font_size"
+                android:text="@string/save"
+                android:textColor="@color/background_tint"
+                android:layout_centerHorizontal="true"
+                />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/countryList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:divider="@color/background_tint"
+            android:layout_below="@id/saveView"
+            android:dividerHeight="1dp" />
+    </RelativeLayout>
+
+</FrameLayout>

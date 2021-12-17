@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">Country Counter</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="dismiss">Tap to dismiss…</string>
+    <string name="countriesListParcel">countriesList</string>
+    <string name="continentName">continentName</string>
+
+    <!-- Tabs -->
+    <string name="tab_0">Countries</string>
+    <string name="tab_1">Dashboard</string>
+    <string name="tab_2">Settings</string>
+
+    <!-- Button labels -->
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+
+    <!-- Default stats -->
+    <string name="world_country_stats_default">0/186\n0.00%</string>
+    <string name="world_continent_stats_default">0/7\n0.00%</string>
+    <string name="africa_stats_default">0/54\n0.00%</string>
+    <string name="antarctica_stats_default">0/1\n0.00%</string>
+    <string name="asia_stats_default">0/41\n0.00%</string>
+    <string name="europe_stats_default">0/42\n0.00%</string>
+    <string name="north_american_stats_default">0/23\n0.00%</string>
+    <string name="oceania_stats_default">0/14\n0.00%</string>
+    <string name="south_american_stats_default">0/12\n0.00%</string>
+    <string name="stats">%1$s/%2$s\n%3$s%%</string>
+
+    <!-- Country labels -->
+    <string name="africa_title">Africa</string>
+    <string name="antarctica_title">Antarctica</string>
+    <string name="asia_title">Asia</string>
+    <string name="europe_title">Europe</string>
+    <string name="north_america_title">North America</string>
+    <string name="oceania_title">Oceania</string>
+    <string name="south_america_title">South America</string>
+    <string name="internal_africa">Africa</string>
+    <string name="internal_antarctica">Antarctica</string>
+    <string name="internal_asia">Asia</string>
+    <string name="internal_europe">Europe</string>
+    <string name="internal_north_america">North America</string>
+    <string name="internal_oceania">Oceania</string>
+    <string name="internal_south_america">South America</string>
+    <string name="internal_uk">United Kingdom</string>
+    <string name="split_uk">Split the United Kingdom</string>
+    <string name="world_continent_title">Continents</string>
+    <string name="world_country_title">Countries</string>
+
+    <!-- Keys used for saving -->
+    <string name="intro_dashboard_swipe">intro_dashboard_swipe</string>
+    <string name="intro_countries_edit">intro_countries_edit</string>
+    <string name="intro_countries_save_cancel">intro_countries_save_cancel</string>
+    <string name="intro_file">intro</string>
+    <string name="intro_settings">intro_settings</string>
+    <string name="other_prefs_file">other_prefs</string>
+    <string name="hide_ads">hide_ads</string>
+    <string name="stop_analytics">stop_analytics</string>
+    <string name="privacy_policy_complete">privacy_policy_complete</string>
+
+    <!-- Helper screens -->
+    <string name="swipe_helper">Swipe right to view and edit visited countries list.\n\nSwipe left to adjust countries list for each continent.</string>
+    <string name="edit_helper">Tap the edit button to add or\nremove countries from your list.</string>
+    <string name="save_cancel_helper">Tap save to update your visited countries.\n\nTap cancel to revert back to previous save.</string>
+    <string name="settings_helper">Settings will save automatically.\n\nCountries will be added or removed from continents instantly.</string>
+
+    <!-- Accessibility descriptions -->
+    <string name="edit_helper_desc">Tap the edit button to add or remove countries from your list. Tap to dismiss.</string>
+    <string name="save_cancel_helper_desc">Tap save to update your visited countries. Tap cancel to revert back to previous save. Tap to dismiss.</string>
+    <string name="settings_helper_desc">Settings will save automatically. Countries will be added or removed from continents instantly. Tap to dismiss.</string>
+    <string name="menu_helper_desc">Swipe right to view and edit visited countries list. Swipe left to edit possible countries for each continent. Tap to dismiss.</string>
+    <string name="close_desc">Tap to close</string>
+    <string name="edit_desc">Tap to edit</string>
+    <string name="cancel_desc">Tap to cancel</string>
+    <string name="save_desc">Tap to save</string>
+    <string name="expand_desc">Expand or collapse group</string>
+    <string name="progress_bar_desc">Progress bar</string>
+    <string name="background_desc">Map background</string>
+</resources>

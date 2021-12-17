@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context=".DashboardFragment"
+    android:id="@+id/mainDashboard">
+
+    <View
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/background_tint"
+                android:text="The World"
+                android:textSize="@dimen/title_font_size"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/worldCountryFrame"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/worldCountryTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/worldCountry"
+                        android:text="@string/world_country_title"
+                        android:textSize="@dimen/title_font_size"/>
+
+                    <FrameLayout
+                        android:layout_width="150dp"
+                        android:layout_height="150dp">
+
+                        <uk.co.adamchaplin.countrycounter.CircularProgressBar
+                            android:id="@+id/worldCountryProgressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:progress="0"
+                            app:progressBarThickness="15dp"
+                            app:progressbarColor="@color/worldCountry"
+                            android:contentDescription="@string/progress_bar_desc"/>
+
+                        <TextView
+                            android:id="@+id/worldCountryText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/worldCountry"
+                            android:text="@string/world_country_stats_default"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="@dimen/sub_title_font_size"/>
+
+                    </FrameLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/worldContinentFrame"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/worldContinentTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/worldContinent"
+                        android:text="@string/world_continent_title"
+                        android:textSize="@dimen/title_font_size"/>
+
+                    <FrameLayout
+                        android:layout_width="150dp"
+                        android:layout_height="150dp">
+
+                        <uk.co.adamchaplin.countrycounter.CircularProgressBar
+                            android:id="@+id/worldContinentProgressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:progress="0"
+                            app:progressBarThickness="15dp"
+                            app:progressbarColor="@color/worldContinent"
+                            android:contentDescription="@string/progress_bar_desc"/>
+
+                        <TextView
+                            android:id="@+id/worldContinentText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/worldContinent"
+                            android:text="@string/world_continent_stats_default"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="@dimen/sub_title_font_size"/>
+
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/breaker"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="1dp"
+                android:background="@color/background_tint" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/background_tint"
+                android:text="Individual Continents"
+                android:textSize="@dimen/title_font_size"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/africaFrame"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/africaTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/africa"
+                        android:text="@string/africa_title"
+                        android:textSize="@dimen/title_font_size"/>
+
+                    <FrameLayout
+                        android:layout_width="150dp"
+                        android:layout_height="150dp">
+
+                        <uk.co.adamchaplin.countrycounter.CircularProgressBar
+                            android:id="@+id/africaProgressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:progress="0"
+                            app:progressBarThickness="15dp"
+                            app:progressbarColor="@color/africa"
+                            android:contentDescription="@string/progress_bar_desc"/>
+
+                        <TextView
+                            android:id="@+id/africaText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/africa"
+                            android:text="@string/africa_stats_default"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="@dimen/sub_title_font_size"/>
+
+                    </FrameLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/antarcticaFrame"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/antarcticaTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/antarctica"
+                        android:text="@string/antarctica_title"
+                        android:textSize="@dimen/title_font_size"/>
+
+                    <FrameLayout
+                        android:layout_width="150dp"
+                        android:layout_height="150dp">
+
+                        <uk.co.adamchaplin.countrycounter.CircularProgressBar
+                            android:id="@+id/antarcticaProgressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:progress="0"
+                            app:progressBarThickness="15dp"
+                            app:progressbarColor="@color/antarctica"
+                            android:contentDescription="@string/progress_bar_desc"/>
+
+                        <TextView
+                            android:id="@+id/antarcticaText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/antarctica"
+                            android:text="@string/antarctica_stats_default"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="@dimen/sub_title_font_size"/>
+
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/asiaFrame"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/asiaTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/asia"
+                        android:text="@string/asia_title"
+                        android:textSize="@dimen/title_font_size"/>
+
+                    <FrameLayout
+                        android:layout_width="150dp"
+                        android:layout_height="150dp">
+
+                        <uk.co.adamchaplin.countrycounter.CircularProgressBar
+                            android:id="@+id/asiaProgressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:progress="0"
+                            app:progressBarThickness="15dp"
+                            app:progressbarColor="@color/asia"
+                            android:contentDescription="@string/progress_bar_desc"/>
+
+                        <TextView
+                            android:id="@+id/asiaText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/asia"
+                            android:text="@string/asia_stats_default"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="@dimen/sub_title_font_size"/>
+
+                    </FrameLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/europeFrame"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/europeTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/europe"
+                        android:text="@string/europe_title"
+                        android:textSize="@dimen/title_font_size"/>
+
+                    <FrameLayout
+                        android:layout_width="150dp"
+                        android:layout_height="150dp">
+
+                        <uk.co.adamchaplin.countrycounter.CircularProgressBar
+                            android:id="@+id/europeProgressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:progress="0"
+                            app:progressBarThickness="15dp"
+                            app:progressbarColor="@color/europe"
+                            android:contentDescription="@string/progress_bar_desc"/>
+
+                        <TextView
+                            android:id="@+id/europeText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/europe"
+                            android:text="@string/europe_stats_default"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="@dimen/sub_title_font_size"/>
+
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/northAmericanFrame"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/northAmericanTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/northAmerica"
+                        android:text="@string/north_america_title"
+                        android:textSize="@dimen/title_font_size"/>
+
+                    <FrameLayout
+                        android:layout_width="150dp"
+                        android:layout_height="150dp">
+
+                        <uk.co.adamchaplin.countrycounter.CircularProgressBar
+                            android:id="@+id/northAmericaProgressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:progress="0"
+                            app:progressBarThickness="15dp"
+                            app:progressbarColor="@color/northAmerica"
+                            android:contentDescription="@string/progress_bar_desc"/>
+
+                        <TextView
+                            android:id="@+id/northAmericanText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/northAmerica"
+                            android:text="@string/north_american_stats_default"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="@dimen/sub_title_font_size"/>
+
+                    </FrameLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/oceaniaFrame"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/oceaniaTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/oceania"
+                        android:text="@string/oceania_title"
+                        android:textSize="@dimen/title_font_size"/>
+
+                    <FrameLayout
+                        android:layout_width="150dp"
+                        android:layout_height="150dp">
+
+                        <uk.co.adamchaplin.countrycounter.CircularProgressBar
+                            android:id="@+id/oceaniaProgressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:progress="0"
+                            app:progressBarThickness="15dp"
+                            app:progressbarColor="@color/oceania"
+                            android:contentDescription="@string/progress_bar_desc"/>
+
+                        <TextView
+                            android:id="@+id/oceaniaText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/oceania"
+                            android:text="@string/oceania_stats_default"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="@dimen/sub_title_font_size"/>
+
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+                <LinearLayout
+                    android:id="@+id/southAmericanFrame"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/southAmericanTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/southAmerica"
+                        android:text="@string/south_america_title"
+                        android:textSize="@dimen/title_font_size"/>
+
+                    <FrameLayout
+                        android:layout_width="150dp"
+                        android:layout_height="150dp">
+
+                        <uk.co.adamchaplin.countrycounter.CircularProgressBar
+                            android:id="@+id/southAmericaProgressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:progress="0"
+                            app:progressBarThickness="15dp"
+                            app:progressbarColor="@color/southAmerica"
+                            android:contentDescription="@string/progress_bar_desc"/>
+
+                        <TextView
+                            android:id="@+id/southAmericanText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/southAmerica"
+                            android:text="@string/south_american_stats_default"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="@dimen/sub_title_font_size"/>
+
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

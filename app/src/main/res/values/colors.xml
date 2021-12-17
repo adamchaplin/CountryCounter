@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="pastelRed">#ffb3ba</color>
+    <color name="pastelOrange">#ffdfba</color>
+    <color name="pastelYellow">#ffffba</color>
+    <color name="pastelGreen">#baffc9</color>
+    <color name="pastelBlue">#bae1ff</color>
+    <color name="pastelPurple">#dfccf1</color>
+    <color name="pastelPink">#ffd1e4</color>
+    <color name="white">#ffffff</color>
+    <color name="worldCountry">@color/pastelYellow</color>
+    <color name="worldContinent">@color/pastelYellow</color>
+    <color name="africa">@color/pastelRed</color>
+    <color name="antarctica">@color/white</color>
+    <color name="asia">@color/pastelPurple</color>
+    <color name="europe">@color/pastelOrange</color>
+    <color name="northAmerica">@color/pastelGreen</color>
+    <color name="oceania">@color/pastelBlue</color>
+    <color name="southAmerica">@color/pastelPink</color>
+    <color name="background_tint">#B0B0B0</color>
+    <color name="background">#1A1A1A</color>
+    <color name="black_overlay">#66000000</color>
+</resources>
+

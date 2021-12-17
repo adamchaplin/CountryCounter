@@ -1,0 +1,46 @@
+Privacy Policy
+This page is used to inform users regarding policies with the collection, use, and disclosure of Personal Information for any user of this service.
+
+If you choose to use this service, then you agree to the collection and use of information in relation to this policy. The Information collected by this app is used for providing and improving the service. Information will not be used or shared with anyone except as described in this Privacy Policy.
+
+Information Collection and Use
+The app does use third-party services that may collect information used to identify you, it is recommended to read the privacy policy of those outlined before using the app. These services are outlined below:
+Google Play Services
+Google Analytics for Firebase
+Firebase Crashlytics
+Firebase Performance Monitoring
+AdMob
+Log Data
+
+Whenever you use this service, in the case of an error in the app data and information (through third party products) on your phone called Log Data is collected. This Log Data may include information such as your device Internet Protocol (“IP”) address, device name, operating system version, the configuration of the app when utilizing my Service, the time and date of your use of the Service, and other statistics.
+
+Cookies
+Cookies are files with a small amount of data that are commonly used as anonymous unique identifiers. These are sent to your browser from the websites that you visit and are stored on your device's internal memory.
+
+This Service does not use these “cookies” explicitly. However, the app may use third party code and libraries that use “cookies” to collect information and improve their services. You have the option to either accept or refuse these cookies and know when a cookie is being sent to your device. If you choose to refuse our cookies, you may not be able to use some portions of this Service.
+
+Service Providers
+Third-party companies and individuals may be employed due to the following reasons:
+To facilitate the service;
+To provide the service on our behalf;
+To perform service-related services; or
+To assist in analyzing how our Service is used.
+
+These third parties will have access to your Personal Information. The reason is to perform the tasks assigned to them on our behalf. However, they are obligated not to disclose or use the information for any other purpose.
+
+Security
+Your trust in providing your Personal Information is greatly valued, thus we are striving to use commercially acceptable means of protecting it. But remember that no method of transmission over the internet, or method of electronic storage is 100% secure and reliable, and its absolute security cannot be guaranteed.
+
+Links to Other Sites
+This Service may contain links to other sites. If you click on a third-party link, you will be directed to that site. Note that these external sites are not operated by me. Therefore, it is strongly advised to review the Privacy Policy of these websites. I have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services.
+
+Children’s Privacy
+These Services do not address anyone under the age of 13. Personally identifiable information from children under 13 is not knowingly collected. In the case it is discovered that a child under 13 has provided personal information, it will be immediately deleted this from our servers. If you are a parent or guardian and you are aware that your child has provided personal information, please contact us so that the necessary actions can be performed.
+
+Changes to This Privacy Policy
+This Privacy Policy may be updated from time to time. Thus, you are advised to review this page periodically for any changes. Any changes will be clear by posting the new Privacy Policy on this page.
+
+This policy is effective as of 2020-06-05
+
+Contact
+If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact us at contact@adamchaplin.co.uk.
