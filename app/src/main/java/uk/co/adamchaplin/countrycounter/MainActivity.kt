@@ -90,24 +90,13 @@ class MainActivity : AppCompatActivity() {
         introSharedPref = applicationContext.getSharedPreferences(getString(R.string.intro_file),Context.MODE_PRIVATE)
         val otherSharedPref = applicationContext.getSharedPreferences(getString(R.string.other_prefs_file),Context.MODE_PRIVATE)
 
-        // TODO TESTING
-        with(introSharedPref.edit()) {
-            putBoolean(getString(R.string.intro_countries_edit), false)
-            putBoolean(getString(R.string.intro_dashboard_swipe), false)
-            putBoolean(getString(R.string.intro_countries_save_cancel), false)
-            putBoolean(getString(R.string.intro_settings), false)
-            commit()
-        }
-
-
         introSwipe = introSharedPref.getBoolean(getString(R.string.intro_dashboard_swipe), false)
         introEdit = introSharedPref.getBoolean(getString(R.string.intro_countries_edit), false)
         introSettings = introSharedPref.getBoolean(getString(R.string.intro_settings), false)
         val stopAnalytics = otherSharedPref.getBoolean(getString(R.string.stop_analytics), false)
         val hideAds = otherSharedPref.getBoolean(getString(R.string.hide_ads), false)
-        // TODO TESTING
-        //setUpAdsAndAnalytics(stopAnalytics, hideAds)
-        setUpAdsAndAnalytics(true, true)
+
+        setUpAdsAndAnalytics(stopAnalytics, hideAds)
 
         binding.tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
