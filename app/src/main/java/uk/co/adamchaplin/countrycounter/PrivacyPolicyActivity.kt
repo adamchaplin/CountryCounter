@@ -24,13 +24,15 @@ class PrivacyPolicyActivity: AppCompatActivity() {
             val sharedPref = applicationContext.getSharedPreferences(getString(R.string.other_prefs_file),
                 Context.MODE_PRIVATE)
             with(sharedPref.edit()) {
-                putBoolean(resources.getString(R.string.privacy_policy_complete), true)
+                putBoolean(resources.getString(R.string.privacy_policy_accepted), true)
                 apply()
             }
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
+        checkAndCreateFile("countries.txt")
+        checkAndCreateFile("settings.txt")
     }
 
     private fun loadStringFromAsset(resourceId: Int): String {
@@ -44,6 +46,12 @@ class PrivacyPolicyActivity: AppCompatActivity() {
         } catch (ex: IOException) {
             ex.printStackTrace()
             return ""
+        }
+    }
+
+    private fun checkAndCreateFile(fileName: String) {
+        if(!applicationContext.getFileStreamPath(fileName).exists()) {
+            Utils.writeToFile(fileName, "", applicationContext)
         }
     }
 }

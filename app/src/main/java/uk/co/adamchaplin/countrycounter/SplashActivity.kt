@@ -9,7 +9,7 @@ class SplashActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val otherSharedPref = applicationContext.getSharedPreferences(getString(R.string.other_prefs_file), Context.MODE_PRIVATE)
-        val completePp = otherSharedPref.getBoolean(getString(R.string.privacy_policy_complete), false)
+        val completePp = otherSharedPref.getBoolean(getString(R.string.privacy_policy_accepted), false)
 
         if(completePp) {
             val intent = Intent(this, MainActivity::class.java)

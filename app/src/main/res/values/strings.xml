@@ -57,7 +57,7 @@
     <string name="other_prefs_file">other_prefs</string>
     <string name="hide_ads">hide_ads</string>
     <string name="stop_analytics">stop_analytics</string>
-    <string name="privacy_policy_complete">privacy_policy_complete</string>
+    <string name="privacy_policy_accepted">privacy_policy_accepted</string>
 
     <!-- Helper screens -->
     <string name="swipe_helper">Swipe right to view and edit visited countries list.\n\nSwipe left to adjust countries list for each continent.</string>
