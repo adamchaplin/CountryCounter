@@ -19,6 +19,7 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.io.BufferedReader
 import java.io.FileNotFoundException
+import java.nio.charset.Charset
 import java.util.Locale
 
 object Utils {
@@ -94,6 +95,21 @@ object Utils {
             return null
         }
         return ret
+    }
+
+    @JvmStatic
+    fun loadStringFromAsset(resources: Resources, resourceId: Int): String {
+        return try {
+            val inputStream: InputStream = resources.openRawResource(resourceId)
+            val size: Int = inputStream.available()
+            val buffer = ByteArray(size)
+            inputStream.read(buffer)
+            inputStream.close()
+            String(buffer, Charset.forName("UTF-8"))
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+            return ""
+        }
     }
 
     @JvmStatic

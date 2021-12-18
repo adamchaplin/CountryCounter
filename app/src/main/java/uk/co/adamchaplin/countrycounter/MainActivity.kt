@@ -27,10 +27,7 @@ import com.google.gson.JsonObject
 import org.json.JSONObject
 import uk.co.adamchaplin.countrycounter.Utils.getContinentSettings
 import uk.co.adamchaplin.countrycounter.Utils.getContinentVisitedCountries
-import uk.co.adamchaplin.countrycounter.databinding.ActivityMainBinding
-import uk.co.adamchaplin.countrycounter.databinding.HelperEditBinding
-import uk.co.adamchaplin.countrycounter.databinding.HelperSettingsBinding
-import uk.co.adamchaplin.countrycounter.databinding.HelperSwipeBinding
+import uk.co.adamchaplin.countrycounter.databinding.*
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -95,6 +92,9 @@ class MainActivity : AppCompatActivity() {
         introSwipe = introSharedPref.getBoolean(getString(R.string.intro_dashboard_swipe), false)
         introEdit = introSharedPref.getBoolean(getString(R.string.intro_countries_edit), false)
         introSettings = introSharedPref.getBoolean(getString(R.string.intro_settings), false)
+
+        displayPrivacyPolicy(view, otherSharedPref)
+
         val stopAnalytics = otherSharedPref.getBoolean(getString(R.string.stop_analytics), false)
         val hideAds = otherSharedPref.getBoolean(getString(R.string.hide_ads), false)
 
@@ -203,6 +203,42 @@ class MainActivity : AppCompatActivity() {
     public override fun onDestroy() {
         findViewById<AdView>(R.id.ad_view)?.destroy()
         super.onDestroy()
+    }
+
+    private fun displayPrivacyPolicy(mainLayout: FrameLayout, otherSharedPref: SharedPreferences) {
+        val completePp = otherSharedPref.getBoolean(getString(R.string.privacy_policy_accepted), false)
+
+        if(!completePp) {
+            val inflater = applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val privacyPolicyBinding = ViewPrivacyPolicyBinding.inflate(inflater)
+            val childLayout = privacyPolicyBinding.root
+            privacyPolicyBinding.policyText.text = Utils.loadStringFromAsset(resources, R.raw.privacy_policy)
+            privacyPolicyBinding.policyButton.setOnClickListener {
+                childLayout.animate()
+                    .alpha(0f)
+                    .setDuration(shortAnimationDuration.toLong())
+                    .setListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator) {
+                            mainLayout.removeView(childLayout)
+                        }
+                    })
+                with(otherSharedPref.edit()) {
+                    putBoolean(resources.getString(R.string.privacy_policy_accepted), true)
+                    apply()
+                }
+
+                checkAndCreateFile("countries.txt")
+                checkAndCreateFile("settings.txt")
+            }
+            mainLayout.addView(childLayout)
+        }
+
+    }
+
+    private fun checkAndCreateFile(fileName: String) {
+        if(!applicationContext.getFileStreamPath(fileName).exists()) {
+            Utils.writeToFile(fileName, "", applicationContext)
+        }
     }
 
     private fun setUpAdsAndAnalytics(stopAnalytics: Boolean, hideAds: Boolean){
