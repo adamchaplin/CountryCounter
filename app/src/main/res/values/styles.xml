@@ -19,9 +19,9 @@
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
     </style>
-
-    <style name="SplashScreenTheme" parent="Theme.AppCompat.NoActionBar">
-    <item name="android:windowBackground">@drawable/splash_screen</item>
-</style>
-
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/background_tint</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/FullscreenTheme</item>
+    </style>
 </resources>
