@@ -94,12 +94,78 @@ class MainActivity : AppCompatActivity() {
         introSettings = introSharedPref.getBoolean(getString(R.string.intro_settings), false)
 
         displayPrivacyPolicy(view, otherSharedPref)
+    }
 
-        val stopAnalytics = otherSharedPref.getBoolean(getString(R.string.stop_analytics), false)
-        val hideAds = otherSharedPref.getBoolean(getString(R.string.hide_ads), false)
+    override fun onStart(){
+        super.onStart()
+        totalAfricanCountries = 54
+        totalAntarcticaCountries = 1
+        totalAsianCountries = 41
+        totalEuropeanCountries = 42
+        totalNorthAmericanCountries = 23
+        totalOceanianCountries = 14
+        totalSouthAmericanCountries = 12
+        importSettings()
+        importVisitedCountries(true)
+    }
 
-        setUpAdsAndAnalytics(stopAnalytics, hideAds)
+    public override fun onPause() {
+        findViewById<AdView>(R.id.ad_view)?.pause()
+        super.onPause()
+    }
 
+    public override fun onResume() {
+        super.onResume()
+        findViewById<AdView>(R.id.ad_view)?.resume()
+    }
+
+    public override fun onDestroy() {
+        findViewById<AdView>(R.id.ad_view)?.destroy()
+        super.onDestroy()
+    }
+
+    private fun displayPrivacyPolicy(mainLayout: FrameLayout, otherSharedPref: SharedPreferences) {
+        val completePp = otherSharedPref.getBoolean(getString(R.string.privacy_policy_accepted), false)
+
+        if(!completePp) {
+            val inflater = applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val privacyPolicyBinding = ViewPrivacyPolicyBinding.inflate(inflater)
+            val childLayout = privacyPolicyBinding.root
+            privacyPolicyBinding.policyText.text = Utils.loadStringFromAsset(resources, R.raw.privacy_policy)
+            privacyPolicyBinding.policyButton.setOnClickListener {
+                childLayout.animate()
+                    .alpha(0f)
+                    .setDuration(shortAnimationDuration.toLong())
+                    .setListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator) {
+                            mainLayout.removeView(childLayout)
+                        }
+                    })
+                with(otherSharedPref.edit()) {
+                    putBoolean(resources.getString(R.string.privacy_policy_accepted), true)
+                    apply()
+                }
+
+                checkAndCreateFile("countries.txt")
+                checkAndCreateFile("settings.txt")
+                setupTabs(mainLayout)
+                setupAdsAndAnalytics(otherSharedPref)
+            }
+            mainLayout.addView(childLayout)
+        } else {
+            setupTabs(mainLayout)
+            setupAdsAndAnalytics(otherSharedPref)
+        }
+
+    }
+
+    private fun checkAndCreateFile(fileName: String) {
+        if(!applicationContext.getFileStreamPath(fileName).exists()) {
+            Utils.writeToFile(fileName, "", applicationContext)
+        }
+    }
+
+    private fun setupTabs(view: FrameLayout) {
         binding.tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when(tab.position){
@@ -173,75 +239,14 @@ class MainActivity : AppCompatActivity() {
                     FirebaseCrashlytics.getInstance().recordException(e)
                 }
             }
-            
+
         }.attach()
     }
 
-    override fun onStart(){
-        super.onStart()
-        totalAfricanCountries = 54
-        totalAntarcticaCountries = 1
-        totalAsianCountries = 41
-        totalEuropeanCountries = 42
-        totalNorthAmericanCountries = 23
-        totalOceanianCountries = 14
-        totalSouthAmericanCountries = 12
-        importSettings()
-        importVisitedCountries(true)
-    }
+    private fun setupAdsAndAnalytics(otherSharedPref: SharedPreferences) {
+        val stopAnalytics = otherSharedPref.getBoolean(getString(R.string.stop_analytics), false)
+        val hideAds = otherSharedPref.getBoolean(getString(R.string.hide_ads), false)
 
-    public override fun onPause() {
-        findViewById<AdView>(R.id.ad_view)?.pause()
-        super.onPause()
-    }
-
-    public override fun onResume() {
-        super.onResume()
-        findViewById<AdView>(R.id.ad_view)?.resume()
-    }
-
-    public override fun onDestroy() {
-        findViewById<AdView>(R.id.ad_view)?.destroy()
-        super.onDestroy()
-    }
-
-    private fun displayPrivacyPolicy(mainLayout: FrameLayout, otherSharedPref: SharedPreferences) {
-        val completePp = otherSharedPref.getBoolean(getString(R.string.privacy_policy_accepted), false)
-
-        if(!completePp) {
-            val inflater = applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val privacyPolicyBinding = ViewPrivacyPolicyBinding.inflate(inflater)
-            val childLayout = privacyPolicyBinding.root
-            privacyPolicyBinding.policyText.text = Utils.loadStringFromAsset(resources, R.raw.privacy_policy)
-            privacyPolicyBinding.policyButton.setOnClickListener {
-                childLayout.animate()
-                    .alpha(0f)
-                    .setDuration(shortAnimationDuration.toLong())
-                    .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            mainLayout.removeView(childLayout)
-                        }
-                    })
-                with(otherSharedPref.edit()) {
-                    putBoolean(resources.getString(R.string.privacy_policy_accepted), true)
-                    apply()
-                }
-
-                checkAndCreateFile("countries.txt")
-                checkAndCreateFile("settings.txt")
-            }
-            mainLayout.addView(childLayout)
-        }
-
-    }
-
-    private fun checkAndCreateFile(fileName: String) {
-        if(!applicationContext.getFileStreamPath(fileName).exists()) {
-            Utils.writeToFile(fileName, "", applicationContext)
-        }
-    }
-
-    private fun setUpAdsAndAnalytics(stopAnalytics: Boolean, hideAds: Boolean){
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!stopAnalytics)
         FirebasePerformance.getInstance().isPerformanceCollectionEnabled = !stopAnalytics
 
