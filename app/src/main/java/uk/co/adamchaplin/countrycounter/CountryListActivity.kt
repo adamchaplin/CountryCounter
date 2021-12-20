@@ -140,7 +140,7 @@ class CountryListActivity : AppCompatActivity() {
         var introSave = sharedPref.getBoolean(getString(R.string.intro_countries_save_cancel), false)
 
         if(!introSave) {
-            val inflater = applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater = LayoutInflater.from(applicationContext)
             val introBinding = HelperSaveCancelBinding.inflate(inflater)
             val childLayout = introBinding.root
 

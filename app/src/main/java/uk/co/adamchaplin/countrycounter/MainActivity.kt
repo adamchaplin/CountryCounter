@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity() {
         val completePp = otherSharedPref.getBoolean(getString(R.string.privacy_policy_accepted), false)
 
         if(!completePp) {
-            val inflater = applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater = LayoutInflater.from(applicationContext)
             val privacyPolicyBinding = ViewPrivacyPolicyBinding.inflate(inflater)
             val childLayout = privacyPolicyBinding.root
             privacyPolicyBinding.policyText.text = Utils.loadStringFromAsset(resources, R.raw.privacy_policy)
@@ -478,7 +478,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun introEdit(mainLayout: FrameLayout){
         if(!introEdit) {
-            val inflater = applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater = LayoutInflater.from(applicationContext)
             val introBinding = HelperEditBinding.inflate(inflater)
             val childLayout = introBinding.root
 
@@ -503,7 +503,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun introSwipe(mainLayout: FrameLayout){
         if(!introSwipe){
-            val inflater = applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater = LayoutInflater.from(applicationContext)
             val introBinding = HelperSwipeBinding.inflate(inflater)
             val childLayout = introBinding.root
 
@@ -528,7 +528,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun introSettings(mainLayout: FrameLayout) {
         if(!introSettings) {
-            val inflater = applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater = LayoutInflater.from(applicationContext)
             val introBinding = HelperSettingsBinding.inflate(inflater)
             val childLayout = introBinding.root
 

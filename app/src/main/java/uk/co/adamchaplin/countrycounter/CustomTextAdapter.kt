@@ -42,8 +42,7 @@ class CustomTextAdapter(
     ): View {
         var tempView = convertView
         if (tempView == null) {
-            val inflater = context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater = LayoutInflater.from(context)
             binding = ListviewItemBinding.inflate(inflater)
             tempView = binding.root
         }

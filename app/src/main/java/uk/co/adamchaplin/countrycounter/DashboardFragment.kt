@@ -11,6 +11,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import uk.co.adamchaplin.countrycounter.Utils.addArrayToIntent
 import uk.co.adamchaplin.countrycounter.databinding.FragmentDashboardBinding
+import uk.co.adamchaplin.countrycounter.databinding.WindowPopupBinding
 
 class DashboardFragment: Fragment() {
 
@@ -111,10 +112,10 @@ class DashboardFragment: Fragment() {
 
     private fun showPopupWindow(view: View?, visitedCountryList: MutableSet<String>, continent: String) {
 
-        val inflater = applicationContext
-            .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView: View = inflater.inflate(R.layout.window_popup, null)
-        val popUpListView = popupView.findViewById<ListView>(R.id.popUpListView)
+        val inflater = LayoutInflater.from(applicationContext)
+        val windowPopupBinding = WindowPopupBinding.inflate(inflater)
+        val popupView = windowPopupBinding.root
+        val popUpListView = windowPopupBinding.popUpListView
         val tempList: ArrayList<String> = arrayListOf()
         if (visitedCountryList.size < 1) {
             tempList.add("No visited countries")
@@ -135,7 +136,7 @@ class DashboardFragment: Fragment() {
             popupWindow.dismiss()
         }
 
-        popupView.findViewById<RelativeLayout>(R.id.editView).setOnClickListener {
+        windowPopupBinding.editView.setOnClickListener {
             mainActivity.refreshCountries()
             val intent = Intent(mainActivity, CountryListActivity::class.java)
             when(continent) {
