@@ -59,6 +59,10 @@
     <string name="stop_analytics">stop_analytics</string>
     <string name="privacy_policy_accepted">privacy_policy_accepted</string>
 
+    <!-- Files -->
+    <string name="countries_file">countries.txt</string>
+    <string name="settings_file">settings.txt</string>
+
     <!-- Helper screens -->
     <string name="swipe_helper">Swipe right to view and edit visited countries list.\n\nSwipe left to adjust countries list for each continent.</string>
     <string name="edit_helper">Tap the edit button to add or\nremove countries from your list.</string>

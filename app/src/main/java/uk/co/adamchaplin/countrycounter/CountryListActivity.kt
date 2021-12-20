@@ -71,7 +71,7 @@ class CountryListActivity : AppCompatActivity() {
     }
 
     private fun importVisitedCountries(){
-        val data = Utils.readFromFile("countries.txt", this)
+        val data = Utils.readFromFile(resources.getString(R.string.countries_file), this)
         if (!data.isNullOrEmpty()) {
             val visited = Gson().fromJson(data, JsonObject::class.java)
             val version = visited.get("Version").asString
@@ -84,9 +84,9 @@ class CountryListActivity : AppCompatActivity() {
                 visitedOceanianCountries = Utils.getContinentVisitedCountries(visited, getString(R.string.internal_oceania))
                 visitedSouthAmericanCountries = Utils.getContinentVisitedCountries(visited, getString(R.string.internal_south_america))
             } else {
-                val e = Exception("Error reading file version for countries.txt: $version")
+                val e = Exception("Error reading file version for ${resources.getString(R.string.countries_file)}: $version")
                 FirebaseCrashlytics.getInstance().recordException(e)
-                Log.e("CountryListActivity", "Error reading file version for countries.txt: $version")
+                Log.e("CountryListActivity", "Error reading file version for ${resources.getString(R.string.countries_file)}: $version")
             }
         } else {
             Log.e("CountryListActivity", "Failed to process countries file.")
@@ -117,7 +117,7 @@ class CountryListActivity : AppCompatActivity() {
         visitedObject.put(getString(R.string.internal_oceania), ocVisited)
         val saVisited = Gson().toJson(visitedSouthAmericanCountries)
         visitedObject.put(getString(R.string.internal_south_america), saVisited)
-        Utils.writeToFile("countries.txt", visitedObject.toString() , this)
+        Utils.writeToFile(resources.getString(R.string.countries_file), visitedObject.toString() , this)
         Utils.checkEasterEggs(applicationContext, resources, visitedAfricanCountries, visitedAntarcticaCountries, visitedAsianCountries, visitedEuropeanCountries, visitedNorthAmericanCountries, visitedOceanianCountries, visitedSouthAmericanCountries)
     }
 

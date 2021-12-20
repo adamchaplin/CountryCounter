@@ -146,8 +146,8 @@ class MainActivity : AppCompatActivity() {
                     apply()
                 }
 
-                checkAndCreateFile("countries.txt")
-                checkAndCreateFile("settings.txt")
+                checkAndCreateFile(resources.getString(R.string.countries_file))
+                checkAndCreateFile(resources.getString(R.string.settings_file))
                 setupTabs(mainLayout)
                 setupAdsAndAnalytics(otherSharedPref)
             }
@@ -309,7 +309,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun importSettings(){
-        val data = Utils.readFromFile("settings.txt", this)
+        val data = Utils.readFromFile(resources.getString(R.string.settings_file), this)
         if (!data.isNullOrEmpty()) {
             val settings = Gson().fromJson(data, JsonObject::class.java)
             val version = settings.get("Version").asString
@@ -334,9 +334,9 @@ class MainActivity : AppCompatActivity() {
                 southAmericanSettings = getContinentSettings(settings, getString(R.string.internal_south_america))
                 totalSouthAmericanCountries += southAmericanSettings.size
             } else {
-                val e = Exception("Error reading file version for settings.txt: $version")
+                val e = Exception("Error reading file version for ${resources.getString(R.string.settings_file)}: $version")
                 FirebaseCrashlytics.getInstance().recordException(e)
-                Log.e("MainActivity", "Error reading file version for settings.txt: $version")
+                Log.e("MainActivity", "Error reading file version for ${resources.getString(R.string.settings_file)}: $version")
             }
         } else {
             Log.e("MainActivity", "Failed to process settings file.")
@@ -360,11 +360,11 @@ class MainActivity : AppCompatActivity() {
         settingsObject.put(getString(R.string.internal_oceania), ocSettings)
         val saSettings = Gson().toJson(southAmericanSettings)
         settingsObject.put(getString(R.string.internal_south_america), saSettings)
-        Utils.writeToFile("settings.txt", settingsObject.toString() , this)
+        Utils.writeToFile(resources.getString(R.string.settings_file), settingsObject.toString() , this)
     }
 
     private fun importVisitedCountries(doValidate: Boolean){
-        val data = Utils.readFromFile("countries.txt", this)
+        val data = Utils.readFromFile(resources.getString(R.string.countries_file), this)
         if (!data.isNullOrEmpty()) {
             val visited = Gson().fromJson(data, JsonObject::class.java)
             val version = visited.get("Version").asString
@@ -377,9 +377,9 @@ class MainActivity : AppCompatActivity() {
                 visitedOceanianCountries = getContinentVisitedCountries(visited, getString(R.string.internal_oceania))
                 visitedSouthAmericanCountries = getContinentVisitedCountries(visited, getString(R.string.internal_south_america))
             } else {
-                val e = Exception("Error reading file version for countries.txt: $version")
+                val e = Exception("Error reading file version for ${resources.getString(R.string.countries_file)}: $version")
                 FirebaseCrashlytics.getInstance().recordException(e)
-                Log.e("MainActivity", "Error reading file version for countries.txt: $version")
+                Log.e("MainActivity", "Error reading file version for ${resources.getString(R.string.countries_file)}: $version")
             }
         } else {
             Log.e("MainActivity", "Failed to process countries file.")
@@ -406,7 +406,7 @@ class MainActivity : AppCompatActivity() {
         visitedObject.put(getString(R.string.internal_oceania), ocVisited)
         val saVisited = Gson().toJson(visitedSouthAmericanCountries)
         visitedObject.put(getString(R.string.internal_south_america), saVisited)
-        Utils.writeToFile("countries.txt", visitedObject.toString() , this)
+        Utils.writeToFile(resources.getString(R.string.countries_file), visitedObject.toString() , this)
     }
 
     private fun validateVisited(){
