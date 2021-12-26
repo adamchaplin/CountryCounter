@@ -64,10 +64,10 @@
     <string name="settings_file">settings.txt</string>
 
     <!-- Helper screens -->
-    <string name="swipe_helper">Swipe right to view and edit visited countries list.\n\nSwipe left to adjust countries list for each continent.</string>
+    <string name="swipe_helper">Swipe right to view and edit visited countries list.\n\nSwipe left to customise the countries list for each continent.\n\nThe countries lists are defaulted to the UN member states</string>
     <string name="edit_helper">Tap the edit button to add or\nremove countries from your list.</string>
     <string name="save_cancel_helper">Tap save to update your visited countries.\n\nTap cancel to revert back to previous save.</string>
-    <string name="settings_helper">Settings will save automatically.\n\nCountries will be added or removed from continents instantly.</string>
+    <string name="settings_helper">Settings will save automatically.\n\nUse the settings page to customise which countries are in each continent\n\nCountries will be added or removed from continents instantly.</string>
 
     <!-- Accessibility descriptions -->
     <string name="edit_helper_desc">Tap the edit button to add or remove countries from your list. Tap to dismiss.</string>

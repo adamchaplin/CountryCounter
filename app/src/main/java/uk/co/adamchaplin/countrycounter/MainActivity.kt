@@ -162,6 +162,42 @@ class MainActivity : AppCompatActivity() {
     private fun checkAndCreateFile(fileName: String) {
         if(!applicationContext.getFileStreamPath(fileName).exists()) {
             Utils.writeToFile(fileName, "", applicationContext)
+            if(fileName == resources.getString(R.string.settings_file)) {
+                getDefaultSettings()
+                saveSettings()
+            }
+        }
+    }
+
+    private fun getDefaultSettings() {
+        val defaultSettings = resources.openRawResource(R.raw.default_settings).bufferedReader().use { it.readText() }
+        val defaultSettingsJson : JsonObject? = Gson().fromJson(defaultSettings, JsonObject::class.java)
+        if (defaultSettingsJson != null) {
+            africanSettings =
+                getContinentSettings(defaultSettingsJson, getString(R.string.internal_africa))
+            totalAfricanCountries += africanSettings.size
+            antarcticaSettings =
+                getContinentSettings(defaultSettingsJson, getString(R.string.internal_antarctica))
+            totalAntarcticaCountries += antarcticaSettings.size
+            asianSettings =
+                getContinentSettings(defaultSettingsJson, getString(R.string.internal_asia))
+            totalAsianCountries += asianSettings.size
+            europeanSettings =
+                getContinentSettings(defaultSettingsJson, getString(R.string.internal_europe))
+            totalEuropeanCountries += europeanSettings.size
+            northAmericanSettings = getContinentSettings(
+                defaultSettingsJson,
+                getString(R.string.internal_north_america)
+            )
+            totalNorthAmericanCountries += northAmericanSettings.size
+            oceanianSettings =
+                getContinentSettings(defaultSettingsJson, getString(R.string.internal_oceania))
+            totalOceanianCountries += oceanianSettings.size
+            southAmericanSettings = getContinentSettings(
+                defaultSettingsJson,
+                getString(R.string.internal_south_america)
+            )
+            totalSouthAmericanCountries += southAmericanSettings.size
         }
     }
 
