@@ -96,19 +96,6 @@ class MainActivity : AppCompatActivity() {
         displayPrivacyPolicy(view, otherSharedPref)
     }
 
-    override fun onStart(){
-        super.onStart()
-        totalAfricanCountries = 54
-        totalAntarcticaCountries = 1
-        totalAsianCountries = 41
-        totalEuropeanCountries = 42
-        totalNorthAmericanCountries = 23
-        totalOceanianCountries = 14
-        totalSouthAmericanCountries = 12
-        importSettings()
-        importVisitedCountries(true)
-    }
-
     public override fun onPause() {
         findViewById<AdView>(R.id.ad_view)?.pause()
         super.onPause()
@@ -145,14 +132,15 @@ class MainActivity : AppCompatActivity() {
                     putBoolean(resources.getString(R.string.privacy_policy_accepted), true)
                     apply()
                 }
-
                 checkAndCreateFile(resources.getString(R.string.countries_file))
                 checkAndCreateFile(resources.getString(R.string.settings_file))
+                resetAndLoad()
                 setupTabs(mainLayout)
                 setupAdsAndAnalytics(otherSharedPref)
             }
             mainLayout.addView(childLayout)
         } else {
+            resetAndLoad()
             setupTabs(mainLayout)
             setupAdsAndAnalytics(otherSharedPref)
         }
@@ -199,6 +187,18 @@ class MainActivity : AppCompatActivity() {
             )
             totalSouthAmericanCountries += southAmericanSettings.size
         }
+    }
+
+    private fun resetAndLoad(){
+        totalAfricanCountries = 54
+        totalAntarcticaCountries = 1
+        totalAsianCountries = 41
+        totalEuropeanCountries = 42
+        totalNorthAmericanCountries = 23
+        totalOceanianCountries = 14
+        totalSouthAmericanCountries = 12
+        importSettings()
+        importVisitedCountries(true)
     }
 
     private fun setupTabs(view: FrameLayout) {
