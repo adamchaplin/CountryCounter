@@ -33,6 +33,11 @@ class CountriesFragment: Fragment() {
         refreshData()
     }
 
+    override fun onResume() {
+        super.onResume()
+        mainActivity.importVisitedCountries(false)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

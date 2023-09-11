@@ -34,6 +34,9 @@ object Utils {
                 contains(resources.getString(R.string.north_america_title)) -> resources.getColor(R.color.northAmerica,null)
                 contains(resources.getString(R.string.oceania_title)) -> resources.getColor(R.color.oceania, null)
                 contains(resources.getString(R.string.south_america_title)) -> resources.getColor(R.color.southAmerica, null)
+                contains(resources.getString(R.string.south_america_title)) -> resources.getColor(R.color.southAmerica, null)
+                contains(resources.getString(R.string.world_country_title)) -> resources.getColor(R.color.worldCountry, null)
+                contains(resources.getString(R.string.world_continent_title)) -> resources.getColor(R.color.worldContinent, null)
                 contains("none") -> resources.getColor(R.color.background_tint, null)
                 else -> {
                     val e = Exception("Error getting color for unknown continent: $continent")

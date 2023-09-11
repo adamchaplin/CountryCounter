@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -37,6 +38,8 @@ class DashboardFragment: Fragment() {
     override fun onStart() {
         super.onStart()
         updateStats()
+        binding.worldCountryProgressBar.setOnClickListener { showPopupWindow(view, (mainActivity.visitedAfricanCountries + mainActivity.visitedAfricanCountries + mainActivity.visitedAntarcticaCountries + mainActivity.visitedAsianCountries + mainActivity.visitedEuropeanCountries + mainActivity.visitedNorthAmericanCountries + mainActivity.visitedOceanianCountries + mainActivity.visitedSouthAmericanCountries).sorted().toMutableSet(), getString(R.string.world_country_title)) }
+        binding.worldContinentProgressBar.setOnClickListener { showPopupWindow(view, mainActivity.visitedContinents, getString(R.string.world_continent_title), true) }
         binding.africaProgressBar.setOnClickListener { showPopupWindow(view, mainActivity.visitedAfricanCountries, getString(R.string.internal_africa)) }
         binding.antarcticaProgressBar.setOnClickListener { showPopupWindow(view, mainActivity.visitedAntarcticaCountries, getString(R.string.internal_antarctica)) }
         binding.asiaProgressBar.setOnClickListener { showPopupWindow(view, mainActivity.visitedAsianCountries, getString(R.string.internal_asia)) }
@@ -48,6 +51,7 @@ class DashboardFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
+        mainActivity.importVisitedCountries(false)
         updateStats()
     }
 
@@ -62,7 +66,7 @@ class DashboardFragment: Fragment() {
         val totalCountries =
             mainActivity.totalAfricanCountries + mainActivity.totalAntarcticaCountries + mainActivity.totalAsianCountries + mainActivity.totalEuropeanCountries + mainActivity.totalNorthAmericanCountries + mainActivity.totalOceanianCountries + mainActivity.totalSouthAmericanCountries
         updateCountryStats(totalVisitedCountries, totalCountries, binding.worldCountryText, binding.worldCountryProgressBar)
-        updateContinentStats()
+        updateContinentStats(mainActivity.visitedContinents.size)
         updateCountryStats(mainActivity.visitedAfricanCountries.size, mainActivity.totalAfricanCountries, binding.africaText, binding.africaProgressBar)
         updateCountryStats(mainActivity.visitedAntarcticaCountries.size, mainActivity.totalAntarcticaCountries, binding.antarcticaText, binding.antarcticaProgressBar)
         updateCountryStats(mainActivity.visitedAsianCountries.size, mainActivity.totalAsianCountries, binding.asiaText, binding.asiaProgressBar)
@@ -72,29 +76,7 @@ class DashboardFragment: Fragment() {
         updateCountryStats(mainActivity.visitedSouthAmericanCountries.size, mainActivity.totalSouthAmericanCountries, binding.southAmericanText, binding.southAmericaProgressBar)
     }
 
-    private fun updateContinentStats(){
-        var visitedContinents = 0
-        if(mainActivity.visitedAfricanCountries.size > 0) {
-            visitedContinents+=1
-        }
-        if(mainActivity.visitedAntarcticaCountries.size > 0) {
-            visitedContinents+=1
-        }
-        if(mainActivity.visitedAsianCountries.size > 0) {
-            visitedContinents+=1
-        }
-        if(mainActivity.visitedEuropeanCountries.size > 0) {
-            visitedContinents+=1
-        }
-        if(mainActivity.visitedNorthAmericanCountries.size > 0) {
-            visitedContinents+=1
-        }
-        if(mainActivity.visitedOceanianCountries.size > 0) {
-            visitedContinents+=1
-        }
-        if(mainActivity.visitedSouthAmericanCountries.size > 0) {
-            visitedContinents+=1
-        }
+    private fun updateContinentStats(visitedContinents: Int){
         val percentRaw = (visitedContinents.toFloat() / 7) * 100
         val percent = String.format("%.2f", percentRaw)
         binding.worldContinentText.text = getString(R.string.stats, visitedContinents.toString(), 7.toString(), percent)
@@ -110,14 +92,16 @@ class DashboardFragment: Fragment() {
         progressBar.setProgress(visitedCountries.toFloat())
     }
 
-    private fun showPopupWindow(view: View?, visitedCountryList: MutableSet<String>, continent: String) {
+    private fun showPopupWindow(view: View?, visitedCountryList: MutableSet<String>, continent: String, continents: Boolean = false) {
 
         val inflater = LayoutInflater.from(applicationContext)
         val windowPopupBinding = WindowPopupBinding.inflate(inflater)
         val popupView = windowPopupBinding.root
         val popUpListView = windowPopupBinding.popUpListView
         val tempList: ArrayList<String> = arrayListOf()
-        if (visitedCountryList.size < 1) {
+        if (visitedCountryList.size < 1 && continents) {
+            tempList.add("No visited continents")
+        } else if (visitedCountryList.size < 1) {
             tempList.add("No visited countries")
         } else {
             tempList.addAll(visitedCountryList)
@@ -134,6 +118,9 @@ class DashboardFragment: Fragment() {
 
         popupView.setOnClickListener {
             popupWindow.dismiss()
+        }
+        if(continents || continent == resources.getString(R.string.world_country_title)) {
+            windowPopupBinding.editView.visibility = INVISIBLE
         }
 
         windowPopupBinding.editView.setOnClickListener {

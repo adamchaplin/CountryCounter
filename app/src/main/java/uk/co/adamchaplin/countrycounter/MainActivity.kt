@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     var visitedNorthAmericanCountries: MutableSet<String> = mutableSetOf()
     var visitedOceanianCountries: MutableSet<String> = mutableSetOf()
     var visitedSouthAmericanCountries: MutableSet<String> = mutableSetOf()
+    var visitedContinents: MutableSet<String> = mutableSetOf()
     var totalAfricanCountries: Int = 54
     var totalAntarcticaCountries: Int = 1
     var totalAsianCountries: Int = 41
@@ -288,7 +289,7 @@ class MainActivity : AppCompatActivity() {
 
         if (!hideAds) {
             val adView = AdView(this)
-            adView.adSize = AdSize.BANNER
+            adView.setAdSize(AdSize.BANNER)
             //adView.adUnitId = "ca-app-pub-3940256099942544/6300978111" //Test ads
             adView.adUnitId = "ca-app-pub-9455047935746208/7089645310" //Real ads
             adView.id = R.id.ad_view
@@ -399,7 +400,7 @@ class MainActivity : AppCompatActivity() {
         Utils.writeToFile(resources.getString(R.string.settings_file), settingsObject.toString() , this)
     }
 
-    private fun importVisitedCountries(doValidate: Boolean){
+    fun importVisitedCountries(doValidate: Boolean){
         val data = Utils.readFromFile(resources.getString(R.string.countries_file), this)
         if (!data.isNullOrEmpty()) {
             val visited = Gson().fromJson(data, JsonObject::class.java)
@@ -412,6 +413,7 @@ class MainActivity : AppCompatActivity() {
                 visitedNorthAmericanCountries = getContinentVisitedCountries(visited, getString(R.string.internal_north_america))
                 visitedOceanianCountries = getContinentVisitedCountries(visited, getString(R.string.internal_oceania))
                 visitedSouthAmericanCountries = getContinentVisitedCountries(visited, getString(R.string.internal_south_america))
+                visitedContinents = getVisitedContinentsList()
             } else {
                 val e = Exception("Error reading file version for ${resources.getString(R.string.countries_file)}: $version")
                 FirebaseCrashlytics.getInstance().recordException(e)
@@ -423,6 +425,32 @@ class MainActivity : AppCompatActivity() {
         if(doValidate){
             validateVisited()
         }
+    }
+
+    private fun getVisitedContinentsList(): MutableSet<String> {
+        val tempVisitedContinents: MutableSet<String> = mutableSetOf()
+        if(visitedAfricanCountries.size > 0) {
+            tempVisitedContinents.add(getString(R.string.africa_title))
+        }
+        if(visitedAntarcticaCountries.size > 0) {
+            tempVisitedContinents.add(getString(R.string.antarctica_title))
+        }
+        if(visitedAsianCountries.size > 0) {
+            tempVisitedContinents.add(getString(R.string.asia_title))
+        }
+        if(visitedEuropeanCountries.size > 0) {
+            tempVisitedContinents.add(getString(R.string.europe_title))
+        }
+        if(visitedNorthAmericanCountries.size > 0) {
+            tempVisitedContinents.add(getString(R.string.north_america_title))
+        }
+        if(visitedOceanianCountries.size > 0) {
+            tempVisitedContinents.add(getString(R.string.oceania_title))
+        }
+        if(visitedSouthAmericanCountries.size > 0) {
+            tempVisitedContinents.add(getString(R.string.south_america_title))
+        }
+        return tempVisitedContinents
     }
 
     fun saveVisitedCountries(){
@@ -459,12 +487,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateVisitedCountries(countryName: String, visitedCountries: MutableSet<String>, countrySettings: MutableSet<String>, countriesList: MutableSet<Country>): Boolean{
+    private fun updateVisitedCountries(continentName: String, visitedCountries: MutableSet<String>, countrySettings: MutableSet<String>, countriesList: MutableSet<Country>): Boolean{
         val removeList = mutableSetOf<String>()
         var changed = false
         for (i in visitedCountries) {
             if (countriesList.find {it.countryName == i} == null && i !in countrySettings) {
-                val e = Exception("Unknown country found in continent $countryName: $i")
+                val e = Exception("Unknown country found in continent $continentName: $i")
                 FirebaseCrashlytics.getInstance().recordException(e)
                 changed = true
                 removeList.add(i)
