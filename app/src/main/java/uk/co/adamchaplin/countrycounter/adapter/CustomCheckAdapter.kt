@@ -8,7 +8,7 @@ import uk.co.adamchaplin.countrycounter.databinding.RecyclerViewCheckboxItemBind
 
 class CustomCheckAdapter(
     private val listValues: ArrayList<String>,
-    private val visitedList: Set<String>,
+    private val visitedList: MutableSet<String>,
     private val colour: Int,
     private val onClickListener: OnClickListener
 ): RecyclerView.Adapter<CustomCheckAdapter.ViewHolder>() {
@@ -41,6 +41,12 @@ class CustomCheckAdapter(
         holder.item.checkedText.checkMarkTintList = colorStateList
         holder.item.root.setOnClickListener {
             onClickListener.onClick(holder.item)
+            val checkedTextView = holder.item.checkedText
+            if(checkedTextView.isChecked) {
+                visitedList += checkedTextView.text.toString()
+            } else {
+                visitedList -= checkedTextView.text.toString()
+            }
         }
     }
 

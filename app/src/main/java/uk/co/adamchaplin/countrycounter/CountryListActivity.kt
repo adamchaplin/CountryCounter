@@ -59,7 +59,7 @@ class CountryListActivity : AppCompatActivity() {
             }
         }
 
-        countryListRecyclerView.adapter = CustomCheckAdapter(countriesList, visitedCountries[currentContinent] ?: setOf(), colour, onClick)
+        countryListRecyclerView.adapter = CustomCheckAdapter(countriesList, visitedCountries[currentContinent]?.toMutableSet() ?: mutableSetOf(), colour, onClick)
     }
 
     private fun displayCountriesActivityHelper(mainCountries: FrameLayout){
