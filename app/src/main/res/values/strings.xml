@@ -29,29 +29,22 @@
     <string name="stats">%1$s/%2$s\n%3$s%%</string>
 
     <!-- Country labels -->
-    <string name="africa_title">Africa</string>
-    <string name="antarctica_title">Antarctica</string>
-    <string name="asia_title">Asia</string>
-    <string name="europe_title">Europe</string>
-    <string name="north_america_title">North America</string>
-    <string name="oceania_title">Oceania</string>
-    <string name="south_america_title">South America</string>
-    <string name="internal_africa">Africa</string>
-    <string name="internal_antarctica">Antarctica</string>
-    <string name="internal_asia">Asia</string>
-    <string name="internal_europe">Europe</string>
-    <string name="internal_north_america">North America</string>
-    <string name="internal_oceania">Oceania</string>
-    <string name="internal_south_america">South America</string>
+    <string name="africa">Africa</string>
+    <string name="antarctica">Antarctica</string>
+    <string name="asia">Asia</string>
+    <string name="europe">Europe</string>
+    <string name="north_america">North America</string>
+    <string name="oceania">Oceania</string>
+    <string name="south_america">South America</string>
     <string name="internal_uk">United Kingdom</string>
     <string name="split_uk">Split the United Kingdom</string>
-    <string name="world_continent_title">Continents</string>
-    <string name="world_country_title">Countries</string>
+    <string name="world_continents">Continents</string>
+    <string name="world_countries">Countries</string>
 
     <!-- Keys used for saving -->
     <string name="intro_dashboard_swipe">intro_dashboard_swipe</string>
     <string name="intro_countries_edit">intro_countries_edit</string>
-    <string name="intro_countries_save_cancel">intro_countries_save_cancel</string>
+    <string name="countries_activity_helper">intro_countries_save_cancel</string>
     <string name="intro_file">intro</string>
     <string name="intro_settings">intro_settings</string>
     <string name="other_prefs_file">other_prefs</string>
@@ -66,12 +59,12 @@
     <!-- Helper screens -->
     <string name="swipe_helper">Swipe right to view and edit visited countries list.\n\nSwipe left to customise the countries list for each continent.\n\nThe countries lists are defaulted to the UN member states</string>
     <string name="edit_helper">Tap the edit button to add or\nremove countries from your list.</string>
-    <string name="save_cancel_helper">Tap save to update your visited countries.\n\nTap cancel to revert back to previous save.</string>
+    <string name="countries_activity_helper_text">Select all the countries you have visited.\n\nTap save to update your visited countries statistics.\n\nTap cancel to revert back to previous save state.</string>
     <string name="settings_helper">Settings will save automatically.\n\nUse the settings page to customise which countries are in each continent\n\nCountries will be added or removed from continents instantly.</string>
 
     <!-- Accessibility descriptions -->
     <string name="edit_helper_desc">Tap the edit button to add or remove countries from your list. Tap to dismiss.</string>
-    <string name="save_cancel_helper_desc">Tap save to update your visited countries. Tap cancel to revert back to previous save. Tap to dismiss.</string>
+    <string name="countries_activity_helper_desc">Select all the countries you have visited. Tap save to update your visited countries statistics. Tap cancel to revert back to previous save state. Tap to dismiss.</string>
     <string name="settings_helper_desc">Settings will save automatically. Countries will be added or removed from continents instantly. Tap to dismiss.</string>
     <string name="menu_helper_desc">Swipe right to view and edit visited countries list. Swipe left to edit possible countries for each continent. Tap to dismiss.</string>
     <string name="close_desc">Tap to close</string>

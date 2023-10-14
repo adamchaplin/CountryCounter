@@ -1,4 +1,4 @@
-package uk.co.adamchaplin.countrycounter
+package uk.co.adamchaplin.countrycounter.dao
 
 class CountryDao(var continentName: String, var countryName: String) : Comparable<CountryDao> {
 

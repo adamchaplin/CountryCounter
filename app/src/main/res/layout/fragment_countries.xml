@@ -4,14 +4,17 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".CountriesFragment"
+    tools:context=".fragment.CountriesFragment"
     android:id="@+id/mainCountries">
 
-    <ListView
-        android:id="@+id/continentList"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/continentListRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:divider="@color/background_tint"
-        android:dividerHeight="1dp" />
+        android:textColor="@color/background_tint"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:textSize="22sp"
+        tools:listitem="@layout/recycler_view_edit_item" />
 </RelativeLayout>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#9F000000">
-
 
     <RelativeLayout
         android:id="@+id/view"
@@ -28,8 +29,8 @@
                 android:layout_height="30dp"
                 android:src="@drawable/ic_cancel_black_24dp"
                 android:layout_centerHorizontal="true"
-                android:tint="@color/background_tint"
-                android:contentDescription="@string/close_desc" />
+                android:contentDescription="@string/close_desc"
+                app:tint="@color/background_tint" />
 
             <TextView
                 android:id="@+id/closeText"
@@ -67,8 +68,8 @@
                 android:layout_height="30dp"
                 android:src="@drawable/ic_edit_black_24dp"
                 android:layout_centerHorizontal="true"
-                android:tint="@color/background_tint"
-                android:contentDescription="@string/edit_desc" />
+                android:contentDescription="@string/edit_desc"
+                app:tint="@color/background_tint" />
 
             <TextView
                 android:id="@+id/editText"
@@ -82,18 +83,17 @@
                 />
         </RelativeLayout>
 
-    <ListView
-        android:id="@+id/popUpListView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/popUpRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:divider="@color/background_tint"
         android:textColor="@color/background_tint"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
         android:textSize="22sp"
-        android:dividerHeight="1dp"
-        android:layout_below="@id/popUpTitle"/>
+        android:layout_below="@id/popUpTitle"
+        tools:listitem="@layout/recycler_view_item"/>
     </RelativeLayout>
 
 </RelativeLayout>

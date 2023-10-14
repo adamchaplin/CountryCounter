@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -23,20 +24,20 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@drawable/ic_save_black_24dp"
-                android:tint="@color/background_tint"
-                android:contentDescription="@null" />
+                android:contentDescription="@null"
+                app:tint="@color/background_tint" />
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@drawable/ic_cancel_black_24dp"
-                android:tint="@color/background_tint"
-                android:contentDescription="@null" />
+                android:contentDescription="@null"
+                app:tint="@color/background_tint" />
         </LinearLayout>
         <TextView
             android:id="@+id/helper_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/save_cancel_helper"
+            android:text="@string/countries_activity_helper_text"
             android:textSize="@dimen/content"
             android:textColor="@color/white"
             android:layout_centerVertical="true"
@@ -60,5 +61,5 @@
         android:id="@+id/full_layout_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/save_cancel_helper_desc"/>
+        android:contentDescription="@string/countries_activity_helper_desc"/>
 </FrameLayout>

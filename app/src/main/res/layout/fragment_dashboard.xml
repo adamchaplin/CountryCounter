@@ -5,14 +5,13 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".DashboardFragment"
+    tools:context=".fragment.DashboardFragment"
     android:id="@+id/mainDashboard">
 
     <View
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="15dp"
-        />
+        android:layout_height="15dp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -53,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@color/worldCountry"
-                        android:text="@string/world_country_title"
+                        android:text="@string/world_countries"
                         android:textSize="@dimen/title_font_size"/>
 
                     <FrameLayout
@@ -96,7 +95,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@color/worldContinent"
-                        android:text="@string/world_continent_title"
+                        android:text="@string/world_continents"
                         android:textSize="@dimen/title_font_size"/>
 
                     <FrameLayout
@@ -163,7 +162,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@color/africa"
-                        android:text="@string/africa_title"
+                        android:text="@string/africa"
                         android:textSize="@dimen/title_font_size"/>
 
                     <FrameLayout
@@ -206,7 +205,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@color/antarctica"
-                        android:text="@string/antarctica_title"
+                        android:text="@string/antarctica"
                         android:textSize="@dimen/title_font_size"/>
 
                     <FrameLayout
@@ -256,7 +255,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@color/asia"
-                        android:text="@string/asia_title"
+                        android:text="@string/asia"
                         android:textSize="@dimen/title_font_size"/>
 
                     <FrameLayout
@@ -299,7 +298,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@color/europe"
-                        android:text="@string/europe_title"
+                        android:text="@string/europe"
                         android:textSize="@dimen/title_font_size"/>
 
                     <FrameLayout
@@ -349,7 +348,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@color/northAmerica"
-                        android:text="@string/north_america_title"
+                        android:text="@string/north_america"
                         android:textSize="@dimen/title_font_size"/>
 
                     <FrameLayout
@@ -392,7 +391,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@color/oceania"
-                        android:text="@string/oceania_title"
+                        android:text="@string/oceania"
                         android:textSize="@dimen/title_font_size"/>
 
                     <FrameLayout
@@ -440,7 +439,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@color/southAmerica"
-                        android:text="@string/south_america_title"
+                        android:text="@string/south_america"
                         android:textSize="@dimen/title_font_size"/>
 
                     <FrameLayout

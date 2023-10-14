@@ -171,7 +171,7 @@ class CircularProgressBar(
     /**
      * Set the progress with an animation.
      * Note that the [android.animation.ObjectAnimator] Class automatically set the progress
-     * so don't call the [CircleProgressBar.setProgress] directly within this method.
+     * so don't call the [CircularProgressBar.setProgress] directly within this method.
      *
      * @param progress The progress it should animate to it.
      */

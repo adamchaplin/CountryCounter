@@ -4,17 +4,19 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".CountriesFragment"
+    tools:context=".fragment.CountriesFragment"
     android:id="@+id/mainSettings">
     <View
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="30dp" />
-    <LinearLayout
-        android:id="@+id/scrollLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/header"
-        android:orientation="vertical"
-        android:isScrollContainer="true" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/settingsListRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:textColor="@color/background_tint"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:textSize="22sp" />
 </RelativeLayout>

@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -24,10 +25,21 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.perf.FirebasePerformance
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import org.json.JSONObject
-import uk.co.adamchaplin.countrycounter.Utils.getContinentSettings
-import uk.co.adamchaplin.countrycounter.Utils.getContinentVisitedCountries
-import uk.co.adamchaplin.countrycounter.databinding.*
+import uk.co.adamchaplin.countrycounter.Continent.Companion.basicContinents
+import uk.co.adamchaplin.countrycounter.adapter.ViewPagerAdapter
+import uk.co.adamchaplin.countrycounter.dao.CountryDao
+import uk.co.adamchaplin.countrycounter.utils.JsonUtils.extractSettingsFromJson
+import uk.co.adamchaplin.countrycounter.databinding.ActivityMainBinding
+import uk.co.adamchaplin.countrycounter.databinding.ViewPrivacyPolicyBinding
+import uk.co.adamchaplin.countrycounter.databinding.HelperEditBinding
+import uk.co.adamchaplin.countrycounter.databinding.HelperSwipeBinding
+import uk.co.adamchaplin.countrycounter.databinding.HelperSettingsBinding
+import uk.co.adamchaplin.countrycounter.fragment.CountriesFragment
+import uk.co.adamchaplin.countrycounter.fragment.DashboardFragment
+import uk.co.adamchaplin.countrycounter.fragment.SettingsFragment
+import uk.co.adamchaplin.countrycounter.utils.FileUtils
+import uk.co.adamchaplin.countrycounter.utils.Utils
+import uk.co.adamchaplin.countrycounter.model.CountriesViewModel
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -37,47 +49,19 @@ import java.nio.charset.Charset
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    val countries: MutableList<CountryDao> = mutableListOf()
-    val states: MutableList<CountryDao> = mutableListOf()
-    var visitedAfricanCountries: MutableSet<String> = mutableSetOf()
-    var visitedAntarcticaCountries: MutableSet<String> = mutableSetOf()
-    var visitedAsianCountries: MutableSet<String> = mutableSetOf()
-    var visitedEuropeanCountries: MutableSet<String> = mutableSetOf()
-    var visitedNorthAmericanCountries: MutableSet<String> = mutableSetOf()
-    var visitedOceanianCountries: MutableSet<String> = mutableSetOf()
-    var visitedSouthAmericanCountries: MutableSet<String> = mutableSetOf()
-    var visitedContinents: MutableSet<String> = mutableSetOf()
-    var totalAfricanCountries: Int = 54
-    var totalAntarcticaCountries: Int = 1
-    var totalAsianCountries: Int = 41
-    var totalEuropeanCountries: Int = 42
-    var totalNorthAmericanCountries: Int = 23
-    var totalOceanianCountries: Int = 14
-    var totalSouthAmericanCountries: Int = 12
-    var africanSettings: MutableSet<String> = mutableSetOf()
-    var antarcticaSettings: MutableSet<String> = mutableSetOf()
-    var asianSettings: MutableSet<String> = mutableSetOf()
-    var europeanSettings: MutableSet<String> = mutableSetOf()
-    var northAmericanSettings: MutableSet<String> = mutableSetOf()
-    var oceanianSettings: MutableSet<String> = mutableSetOf()
-    var southAmericanSettings: MutableSet<String> = mutableSetOf()
-    var africanCountries: MutableSet<Country> = mutableSetOf()
-    var antarcticaCountries: MutableSet<Country> = mutableSetOf()
-    var asianCountries: MutableSet<Country> = mutableSetOf()
-    var europeanCountries: MutableSet<Country> = mutableSetOf()
-    var northAmericanCountries: MutableSet<Country> = mutableSetOf()
-    var oceanianCountries: MutableSet<Country> = mutableSetOf()
-    var southAmericanCountries: MutableSet<Country> = mutableSetOf()
-    var countriesFrag: CountriesFragment = CountriesFragment()
-    var dashboardFrag: DashboardFragment = DashboardFragment()
-    private var settingsFrag: SettingsFragment = SettingsFragment()
+    private val countries: MutableList<CountryDao> = mutableListOf()
+    private val countriesFrag: CountriesFragment = CountriesFragment()
+    private val dashboardFrag: DashboardFragment = DashboardFragment()
+    private val settingsFrag: SettingsFragment = SettingsFragment()
     private var introSwipe: Boolean = false
     private var introEdit: Boolean = false
     private var introSettings: Boolean = false
     private lateinit var introSharedPref: SharedPreferences
     private var shortAnimationDuration : Int = 0
+    private val countriesViewModel: CountriesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("MainActivity","Create MainActivity")
         super.onCreate(savedInstanceState)
         installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -98,18 +82,60 @@ class MainActivity : AppCompatActivity() {
     }
 
     public override fun onPause() {
+        Log.d("MainActivity","Pause MainActivity")
         findViewById<AdView>(R.id.ad_view)?.pause()
         super.onPause()
     }
 
+    public override fun onStart() {
+        Log.d("MainActivity","Start MainActivity")
+        super.onStart()
+        refreshAllCountriesList()
+    }
+
     public override fun onResume() {
+        Log.d("MainActivity","Resume MainActivity")
         super.onResume()
+        importVisitedCountries(false)
         findViewById<AdView>(R.id.ad_view)?.resume()
     }
 
     public override fun onDestroy() {
+        Log.d("MainActivity","Destroy MainActivity")
         findViewById<AdView>(R.id.ad_view)?.destroy()
         super.onDestroy()
+    }
+
+    private fun getCountryData(){
+        Log.d("MainActivity", "Getting initial country data")
+        val stream: InputStream = resources.openRawResource(R.raw.continents)
+        readCSV(stream, countries, "country")
+    }
+
+    private fun readCSV(stream: InputStream, list: MutableList<CountryDao>, errorTag: String){
+        val reader = BufferedReader(InputStreamReader(stream, Charset.forName("UTF-8")))
+        try {
+            run {
+                var line = reader.readLine()
+                while (line != null) {
+                    val tokens = line.split(",").toTypedArray()
+                    when (tokens.size) {
+                        2 -> list.add(CountryDao(tokens[0], tokens[1]))
+                        3 -> list.add(CountryDao(tokens[0], tokens[1]))
+                        else -> {
+                            val e = Exception("Error reading $errorTag from file: ${tokens.joinToString(separator = ", ")}")
+                            FirebaseCrashlytics.getInstance().recordException(e)
+                            Log.e("Main Activity", "Error reading $errorTag from file: ${tokens.joinToString(separator = ", ")}")
+                        }
+                    }
+                    line = reader.readLine()
+                }
+                list.sort()
+            }
+        } catch (e: IOException) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Log.e("MainActivity", "Failed to get $errorTag list: $e")
+        }
     }
 
     private fun displayPrivacyPolicy(mainLayout: FrameLayout, otherSharedPref: SharedPreferences) {
@@ -119,7 +145,7 @@ class MainActivity : AppCompatActivity() {
             val inflater = LayoutInflater.from(applicationContext)
             val privacyPolicyBinding = ViewPrivacyPolicyBinding.inflate(inflater)
             val childLayout = privacyPolicyBinding.root
-            privacyPolicyBinding.policyText.text = Utils.loadStringFromAsset(resources, R.raw.privacy_policy)
+            privacyPolicyBinding.policyText.text = Utils.getStringFromResource(resources, R.raw.privacy_policy)
             privacyPolicyBinding.policyButton.setOnClickListener {
                 childLayout.animate()
                     .alpha(0f)
@@ -135,25 +161,21 @@ class MainActivity : AppCompatActivity() {
                 }
                 checkAndCreateFile(resources.getString(R.string.countries_file))
                 checkAndCreateFile(resources.getString(R.string.settings_file))
-                resetAndLoad()
-                setupTabs(mainLayout)
-                setupAdsAndAnalytics(otherSharedPref)
+                startMainApp(mainLayout, otherSharedPref)
             }
             mainLayout.addView(childLayout)
         } else {
-            resetAndLoad()
-            setupTabs(mainLayout)
-            setupAdsAndAnalytics(otherSharedPref)
+            startMainApp(mainLayout, otherSharedPref)
         }
 
     }
 
     private fun checkAndCreateFile(fileName: String) {
         if(!applicationContext.getFileStreamPath(fileName).exists()) {
-            Utils.writeToFile(fileName, "", applicationContext)
+            FileUtils.writeToFile(fileName, "", applicationContext)
             if(fileName == resources.getString(R.string.settings_file)) {
                 getDefaultSettings()
-                saveSettings()
+                FileUtils.saveActiveSettingsToFile(countriesViewModel.getActiveSettings(), resources, this)
             }
         }
     }
@@ -162,44 +184,104 @@ class MainActivity : AppCompatActivity() {
         val defaultSettings = resources.openRawResource(R.raw.default_settings).bufferedReader().use { it.readText() }
         val defaultSettingsJson : JsonObject? = Gson().fromJson(defaultSettings, JsonObject::class.java)
         if (defaultSettingsJson != null) {
-            africanSettings =
-                getContinentSettings(defaultSettingsJson, getString(R.string.internal_africa))
-            totalAfricanCountries += africanSettings.size
-            antarcticaSettings =
-                getContinentSettings(defaultSettingsJson, getString(R.string.internal_antarctica))
-            totalAntarcticaCountries += antarcticaSettings.size
-            asianSettings =
-                getContinentSettings(defaultSettingsJson, getString(R.string.internal_asia))
-            totalAsianCountries += asianSettings.size
-            europeanSettings =
-                getContinentSettings(defaultSettingsJson, getString(R.string.internal_europe))
-            totalEuropeanCountries += europeanSettings.size
-            northAmericanSettings = getContinentSettings(
-                defaultSettingsJson,
-                getString(R.string.internal_north_america)
-            )
-            totalNorthAmericanCountries += northAmericanSettings.size
-            oceanianSettings =
-                getContinentSettings(defaultSettingsJson, getString(R.string.internal_oceania))
-            totalOceanianCountries += oceanianSettings.size
-            southAmericanSettings = getContinentSettings(
-                defaultSettingsJson,
-                getString(R.string.internal_south_america)
-            )
-            totalSouthAmericanCountries += southAmericanSettings.size
+            countriesViewModel.setActiveSettings(extractSettingsFromJson(defaultSettingsJson))
         }
     }
 
-    private fun resetAndLoad(){
-        totalAfricanCountries = 54
-        totalAntarcticaCountries = 1
-        totalAsianCountries = 41
-        totalEuropeanCountries = 42
-        totalNorthAmericanCountries = 23
-        totalOceanianCountries = 14
-        totalSouthAmericanCountries = 12
+    private fun startMainApp(mainLayout: FrameLayout, otherSharedPref: SharedPreferences){
         importSettings()
+        refreshAllCountriesList()
         importVisitedCountries(true)
+        setupTabs(mainLayout)
+        setupAdsAndAnalytics(otherSharedPref)
+    }
+
+    private fun importSettings(){
+        Log.d("MainActivity", "Importing settings from file")
+        val data = FileUtils.readFromFile(resources.getString(R.string.settings_file), this)
+        if (!data.isNullOrEmpty()) {
+            val settings = Gson().fromJson(data, JsonObject::class.java)
+            val version = settings.get("Version").asString
+            if(version == "1.0.0") {
+                countriesViewModel.setActiveSettings(extractSettingsFromJson(settings))
+            } else {
+                val e = Exception("Error reading file version for ${resources.getString(R.string.settings_file)}: $version")
+                FirebaseCrashlytics.getInstance().recordException(e)
+                Log.e("MainActivity", "Error reading file version for ${resources.getString(R.string.settings_file)}: $version")
+            }
+        } else {
+            val e = Exception("Failed to process settings file.")
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Log.e("MainActivity", "Failed to process settings file.")
+        }
+    }
+
+    private fun refreshAllCountriesList(){
+        Log.d("MainActivity", "Refreshing 'allCountries' list")
+        val allCountries: MutableMap<Continent, Set<String>> = mutableMapOf()
+        val allSettings: MutableMap<Continent, Set<String>> = mutableMapOf()
+        countries.forEach { country ->
+            basicContinents.forEach { continent ->
+                updateAllCountries(country, continent, allCountries)
+                updateAllSettings(country, continent, allSettings)
+            }
+        }
+        countriesViewModel.setAllCountries(allCountries)
+        countriesViewModel.setAllSettings(allSettings)
+    }
+
+    private fun updateAllCountries(country: CountryDao, continent: Continent, allCountries: MutableMap<Continent, Set<String>>) {
+        val countrySettings: Set<String> = countriesViewModel.getActiveSettingsForContinent(continent)
+        if (country.continentName == continent.value || country.countryName in countrySettings) {
+            allCountries[continent] = allCountries[continent]?.plus(country.countryName) ?: setOf(country.countryName)
+        }
+    }
+
+    private fun updateAllSettings(country: CountryDao, continent: Continent, allSettings: MutableMap<Continent, Set<String>>) {
+        if (country.continentName != continent.value && country.continentName.contains(continent.value)) {
+            allSettings[continent] = allSettings[continent]?.plus(country.countryName) ?: setOf(country.countryName)
+        }
+    }
+
+    private fun importVisitedCountries(doValidate: Boolean){
+        Log.d("MainActivity", "importing visited countries from file")
+        val visitedCountries = FileUtils.importVisitedCountriesFromFile(resources.getString(R.string.countries_file), this)
+        countriesViewModel.setVisitedCountries(visitedCountries)
+        if(doValidate){
+            validateVisited()
+        }
+    }
+
+    private fun validateVisited(){
+        Log.d("MainActivity", "Validating visited countries")
+        var unknownFound = false
+        val validatedVisitedCountries = basicContinents.associateWith { continent ->
+            val unknownCountries = getUnknownCountriesFromVisited(continent)
+            if (unknownCountries.isNotEmpty()) {
+                unknownFound = true
+            }
+            countriesViewModel.getVisitedCountries()[continent]?.subtract(unknownCountries) ?: setOf()
+        }
+        if (unknownFound) {
+            countriesViewModel.setVisitedCountries(validatedVisitedCountries.toMutableMap())
+            FileUtils.saveVisitedCountriesToFile(countriesViewModel.getVisitedCountries(), resources, this)
+        }
+    }
+
+    private fun getUnknownCountriesFromVisited(continent: Continent): Set<String>{
+        val visitedCountries: Set<String> = countriesViewModel.getVisitedCountriesForContinent(continent)
+        val allCountries: Set<String> = countriesViewModel.getAllCountriesForContinent(continent)
+        val unknownCountriesList: Set<String> = visitedCountries.map { countryName ->
+            if (allCountries.find {it == countryName} == null) {
+                val e = Exception("Unknown country found in continent $continent: $countryName")
+                FirebaseCrashlytics.getInstance().recordException(e)
+                setOf(countryName)
+            } else {
+                setOf()
+            }
+        }.flatten().toSet()
+
+        return unknownCountriesList
     }
 
     private fun setupTabs(view: FrameLayout) {
@@ -231,11 +313,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-                if(tab.position == 0){
-                    importVisitedCountries(false)
-                }
-            }
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
 
@@ -308,235 +386,6 @@ class MainActivity : AppCompatActivity() {
             MobileAds.initialize(this) {}
             val adRequest = AdRequest.Builder().build()
             adView.loadAd(adRequest)
-        }
-    }
-
-    private fun getCountryData(){
-        var stream: InputStream = resources.openRawResource(R.raw.continents)
-        readCSV(stream, countries, "country")
-
-        stream = resources.openRawResource(R.raw.states)
-        readCSV(stream, states, "state")
-    }
-
-    private fun readCSV(stream: InputStream, list: MutableList<CountryDao>, errorTag: String){
-        val reader = BufferedReader(InputStreamReader(stream, Charset.forName("UTF-8")))
-        try {
-            run {
-                var line = reader.readLine()
-                while (line != null) {
-                    val tokens = line.split(",").toTypedArray()
-                    when (tokens.size) {
-                        2 -> list.add(CountryDao(tokens[0], tokens[1]))
-                        3 -> list.add(CountryDao(tokens[0], tokens[1]))
-                        else -> {
-                            val e = Exception("Error reading $errorTag from file: ${tokens.joinToString(separator = ", ")}")
-                            FirebaseCrashlytics.getInstance().recordException(e)
-                            Log.e("Main Activity", "Error reading $errorTag from file: ${tokens.joinToString(separator = ", ")}")
-                        }
-                    }
-                    line = reader.readLine()
-                }
-                list.sort()
-            }
-        } catch (e: IOException) {
-            FirebaseCrashlytics.getInstance().recordException(e)
-            Log.e("MainActivity", "Failed to get $errorTag list: $e")
-        }
-    }
-
-    private fun importSettings(){
-        val data = Utils.readFromFile(resources.getString(R.string.settings_file), this)
-        if (!data.isNullOrEmpty()) {
-            val settings = Gson().fromJson(data, JsonObject::class.java)
-            val version = settings.get("Version").asString
-            if(version == "1.0.0") {
-                africanSettings = getContinentSettings(settings, getString(R.string.internal_africa))
-                totalAfricanCountries += africanSettings.size
-                antarcticaSettings = getContinentSettings(settings, getString(R.string.internal_antarctica))
-                totalAntarcticaCountries += antarcticaSettings.size
-                asianSettings = getContinentSettings(settings, getString(R.string.internal_asia))
-                totalAsianCountries += asianSettings.size
-                europeanSettings = getContinentSettings(settings, getString(R.string.internal_europe))
-                totalEuropeanCountries += europeanSettings.size
-//                if (getString(R.string.split_uk) in europeanSettings) {
-//                    //totalEuropeanCountries += 2
-//                    europeanSettings.remove(getString(R.string.split_uk))
-//                    totalEuropeanCountries -= 1
-//                }
-                northAmericanSettings = getContinentSettings(settings, getString(R.string.internal_north_america))
-                totalNorthAmericanCountries += northAmericanSettings.size
-                oceanianSettings = getContinentSettings(settings, getString(R.string.internal_oceania))
-                totalOceanianCountries += oceanianSettings.size
-                southAmericanSettings = getContinentSettings(settings, getString(R.string.internal_south_america))
-                totalSouthAmericanCountries += southAmericanSettings.size
-            } else {
-                val e = Exception("Error reading file version for ${resources.getString(R.string.settings_file)}: $version")
-                FirebaseCrashlytics.getInstance().recordException(e)
-                Log.e("MainActivity", "Error reading file version for ${resources.getString(R.string.settings_file)}: $version")
-            }
-        } else {
-            Log.e("MainActivity", "Failed to process settings file.")
-        }
-    }
-
-    fun saveSettings(){
-        val settingsObject = JSONObject()
-        settingsObject.put("Version", "1.0.0")
-        val afSettings = Gson().toJson(africanSettings)
-        settingsObject.put(getString(R.string.internal_africa), afSettings)
-        val anSettings = Gson().toJson(antarcticaSettings)
-        settingsObject.put(getString(R.string.internal_antarctica), anSettings)
-        val asSettings = Gson().toJson(asianSettings)
-        settingsObject.put(getString(R.string.internal_asia), asSettings)
-        val euSettings = Gson().toJson(europeanSettings)
-        settingsObject.put(getString(R.string.internal_europe), euSettings)
-        val naSettings = Gson().toJson(northAmericanSettings)
-        settingsObject.put(getString(R.string.internal_north_america), naSettings)
-        val ocSettings = Gson().toJson(oceanianSettings)
-        settingsObject.put(getString(R.string.internal_oceania), ocSettings)
-        val saSettings = Gson().toJson(southAmericanSettings)
-        settingsObject.put(getString(R.string.internal_south_america), saSettings)
-        Utils.writeToFile(resources.getString(R.string.settings_file), settingsObject.toString() , this)
-    }
-
-    fun importVisitedCountries(doValidate: Boolean){
-        val data = Utils.readFromFile(resources.getString(R.string.countries_file), this)
-        if (!data.isNullOrEmpty()) {
-            val visited = Gson().fromJson(data, JsonObject::class.java)
-            val version = visited.get("Version").asString
-            if(version == "1.0.0") {
-                visitedAfricanCountries = getContinentVisitedCountries(visited, getString(R.string.internal_africa))
-                visitedAntarcticaCountries = getContinentVisitedCountries(visited, getString(R.string.internal_antarctica))
-                visitedAsianCountries = getContinentVisitedCountries(visited, getString(R.string.internal_asia))
-                visitedEuropeanCountries = getContinentVisitedCountries(visited, getString(R.string.internal_europe))
-                visitedNorthAmericanCountries = getContinentVisitedCountries(visited, getString(R.string.internal_north_america))
-                visitedOceanianCountries = getContinentVisitedCountries(visited, getString(R.string.internal_oceania))
-                visitedSouthAmericanCountries = getContinentVisitedCountries(visited, getString(R.string.internal_south_america))
-                visitedContinents = getVisitedContinentsList()
-            } else {
-                val e = Exception("Error reading file version for ${resources.getString(R.string.countries_file)}: $version")
-                FirebaseCrashlytics.getInstance().recordException(e)
-                Log.e("MainActivity", "Error reading file version for ${resources.getString(R.string.countries_file)}: $version")
-            }
-        } else {
-            Log.e("MainActivity", "Failed to process countries file.")
-        }
-        if(doValidate){
-            validateVisited()
-        }
-    }
-
-    private fun getVisitedContinentsList(): MutableSet<String> {
-        val tempVisitedContinents: MutableSet<String> = mutableSetOf()
-        if(visitedAfricanCountries.size > 0) {
-            tempVisitedContinents.add(getString(R.string.africa_title))
-        }
-        if(visitedAntarcticaCountries.size > 0) {
-            tempVisitedContinents.add(getString(R.string.antarctica_title))
-        }
-        if(visitedAsianCountries.size > 0) {
-            tempVisitedContinents.add(getString(R.string.asia_title))
-        }
-        if(visitedEuropeanCountries.size > 0) {
-            tempVisitedContinents.add(getString(R.string.europe_title))
-        }
-        if(visitedNorthAmericanCountries.size > 0) {
-            tempVisitedContinents.add(getString(R.string.north_america_title))
-        }
-        if(visitedOceanianCountries.size > 0) {
-            tempVisitedContinents.add(getString(R.string.oceania_title))
-        }
-        if(visitedSouthAmericanCountries.size > 0) {
-            tempVisitedContinents.add(getString(R.string.south_america_title))
-        }
-        return tempVisitedContinents
-    }
-
-    fun saveVisitedCountries(){
-        val visitedObject = JSONObject()
-        visitedObject.put("Version", "1.0.0")
-        val afVisited = Gson().toJson(visitedAfricanCountries)
-        visitedObject.put(getString(R.string.internal_africa), afVisited)
-        val anVisited = Gson().toJson(visitedAntarcticaCountries)
-        visitedObject.put(getString(R.string.internal_antarctica), anVisited)
-        val asVisited = Gson().toJson(visitedAsianCountries)
-        visitedObject.put(getString(R.string.internal_asia), asVisited)
-        val euVisited = Gson().toJson(visitedEuropeanCountries)
-        visitedObject.put(getString(R.string.internal_europe), euVisited)
-        val naVisited = Gson().toJson(visitedNorthAmericanCountries)
-        visitedObject.put(getString(R.string.internal_north_america), naVisited)
-        val ocVisited = Gson().toJson(visitedOceanianCountries)
-        visitedObject.put(getString(R.string.internal_oceania), ocVisited)
-        val saVisited = Gson().toJson(visitedSouthAmericanCountries)
-        visitedObject.put(getString(R.string.internal_south_america), saVisited)
-        Utils.writeToFile(resources.getString(R.string.countries_file), visitedObject.toString() , this)
-    }
-
-    private fun validateVisited(){
-        refreshCountries()
-        val changed1 = updateVisitedCountries(getString(R.string.internal_africa), visitedAfricanCountries, africanSettings, africanCountries)
-        val changed2 = updateVisitedCountries(getString(R.string.internal_antarctica), visitedAntarcticaCountries, antarcticaSettings, antarcticaCountries)
-        val changed3 = updateVisitedCountries(getString(R.string.internal_asia), visitedAsianCountries, asianSettings, asianCountries)
-        val changed4 = updateVisitedCountries(getString(R.string.internal_europe), visitedEuropeanCountries, europeanSettings, europeanCountries)
-        val changed5 = updateVisitedCountries(getString(R.string.internal_north_america), visitedNorthAmericanCountries, northAmericanSettings, northAmericanCountries)
-        val changed6 = updateVisitedCountries(getString(R.string.internal_oceania), visitedOceanianCountries, oceanianSettings, oceanianCountries)
-        val changed7 = updateVisitedCountries(getString(R.string.internal_south_america), visitedSouthAmericanCountries, southAmericanSettings, southAmericanCountries)
-        if(changed1 || changed2 || changed3 || changed4 || changed5 || changed6 || changed7){
-            saveVisitedCountries()
-        }
-    }
-
-    private fun updateVisitedCountries(continentName: String, visitedCountries: MutableSet<String>, countrySettings: MutableSet<String>, countriesList: MutableSet<Country>): Boolean{
-        val removeList = mutableSetOf<String>()
-        var changed = false
-        for (i in visitedCountries) {
-            if (countriesList.find {it.countryName == i} == null && i !in countrySettings) {
-                val e = Exception("Unknown country found in continent $continentName: $i")
-                FirebaseCrashlytics.getInstance().recordException(e)
-                changed = true
-                removeList.add(i)
-            }
-        }
-        visitedCountries.removeAll(removeList)
-        return changed
-    }
-
-    fun refreshCountries(){
-        africanCountries = mutableSetOf()
-        antarcticaCountries = mutableSetOf()
-        asianCountries = mutableSetOf()
-        europeanCountries = mutableSetOf()
-        northAmericanCountries = mutableSetOf()
-        oceanianCountries = mutableSetOf()
-        southAmericanCountries = mutableSetOf()
-        for (i in countries) {
-            checkAndAddCountry(i, getString(R.string.internal_africa), africanSettings, visitedAfricanCountries, africanCountries)
-            checkAndAddCountry(i, getString(R.string.internal_antarctica), antarcticaSettings, visitedAntarcticaCountries, antarcticaCountries)
-            checkAndAddCountry(i, getString(R.string.internal_asia), asianSettings, visitedAsianCountries, asianCountries)
-            checkAndAddCountry(i, getString(R.string.internal_europe), europeanSettings, visitedEuropeanCountries, europeanCountries)
-//            if (i.countryName == getString(R.string.internal_uk) && resources.getString(
-//                    R.string.split_uk
-//                ) in europeanSettings
-//            ) {
-//                val temp: MutableList<String> = mutableListOf()
-//                for (j in states) {
-//                    if (i.countryName in j.continentName) {
-//                        temp.add(j.countryName)
-//                    }
-//                }
-//            }
-            checkAndAddCountry(i, getString(R.string.internal_north_america), northAmericanSettings, visitedNorthAmericanCountries, northAmericanCountries)
-            checkAndAddCountry(i, getString(R.string.internal_oceania), oceanianSettings, visitedOceanianCountries, oceanianCountries)
-            checkAndAddCountry(i, getString(R.string.internal_south_america), southAmericanSettings, visitedSouthAmericanCountries, southAmericanCountries)
-        }
-    }
-
-    private fun checkAndAddCountry(country: CountryDao, continentToCheck: String, settingsToCheck: MutableSet<String>, visitedCountries: MutableSet<String>, countriesList: MutableSet<Country>){
-        if (country.continentName == continentToCheck || country.countryName in settingsToCheck) {
-            val visited = country.countryName in visitedCountries
-            val tempCountry = Country(country.continentName, country.countryName, Utils.getColourFromContinent(resources, continentToCheck), visited)
-            countriesList.add(tempCountry)
         }
     }
 
