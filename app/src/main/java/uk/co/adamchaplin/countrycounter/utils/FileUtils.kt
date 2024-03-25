@@ -59,42 +59,13 @@ object FileUtils {
     }
 
     @JvmStatic
-    fun importVisitedCountriesFromFile(file: String, context: Context): MutableMap<Continent, Set<String>>{
+    fun getVisitedCountriesFromFile(file: String, context: Context): MutableMap<Continent, Set<String>>{
         val visitedCountriesRaw = readFromFile(file, context)
         if (!visitedCountriesRaw.isNullOrEmpty()) {
             val visitedCountriesJSON = Gson().fromJson(visitedCountriesRaw, JsonObject::class.java)
             val version = visitedCountriesJSON.get("Version").asString
             if(version == "1.0.0") {
-                return mutableMapOf(
-                    Continent.AFRICA to JsonUtils.extractVisitedCountriesForContinentFromJson(
-                        visitedCountriesJSON,
-                        Continent.AFRICA
-                    ),
-                    Continent.ANTARCTICA to JsonUtils.extractVisitedCountriesForContinentFromJson(
-                        visitedCountriesJSON,
-                        Continent.ANTARCTICA
-                    ),
-                    Continent.ASIA to JsonUtils.extractVisitedCountriesForContinentFromJson(
-                        visitedCountriesJSON,
-                        Continent.ASIA
-                    ),
-                    Continent.EUROPE to JsonUtils.extractVisitedCountriesForContinentFromJson(
-                        visitedCountriesJSON,
-                        Continent.EUROPE
-                    ),
-                    Continent.NORTH_AMERICA to JsonUtils.extractVisitedCountriesForContinentFromJson(
-                        visitedCountriesJSON,
-                        Continent.NORTH_AMERICA
-                    ),
-                    Continent.OCEANIA to JsonUtils.extractVisitedCountriesForContinentFromJson(
-                        visitedCountriesJSON,
-                        Continent.OCEANIA
-                    ),
-                    Continent.SOUTH_AMERICA to JsonUtils.extractVisitedCountriesForContinentFromJson(
-                        visitedCountriesJSON,
-                        Continent.SOUTH_AMERICA
-                    ),
-                )
+                return JsonUtils.extractVisitedCountriesFromJson(visitedCountriesJSON)
             } else {
                 val e = Exception("Error reading file version for $file: $version")
                 FirebaseCrashlytics.getInstance().recordException(e)
@@ -120,6 +91,28 @@ object FileUtils {
             context
         )
         Utils.checkEasterEggs(context, resources, visitedCountries)
+    }
+
+    @JvmStatic
+    fun getSettingsFromFile(file: String, context: Context): MutableMap<Continent, Set<String>>{
+        Log.d("MainActivity", "Importing settings from file")
+        val data = readFromFile(file, context)
+        if (!data.isNullOrEmpty()) {
+            val settings = Gson().fromJson(data, JsonObject::class.java)
+            val version = settings.get("Version").asString
+            if(version == "1.0.0") {
+                return JsonUtils.extractSettingsFromJson(settings)
+            } else {
+                val e = Exception("Error reading file version for ${file}: $version")
+                FirebaseCrashlytics.getInstance().recordException(e)
+                Log.e("MainActivity", "Error reading file version for ${file}: $version")
+            }
+        } else {
+            val e = Exception("Settings file is empty or null.")
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Log.e("MainActivity", "Failed to process settings file.")
+        }
+        return mutableMapOf()
     }
 
     @JvmStatic

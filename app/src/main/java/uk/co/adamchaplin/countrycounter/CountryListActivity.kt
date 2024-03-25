@@ -29,7 +29,7 @@ class CountryListActivity : AppCompatActivity() {
         supportActionBar?.hide()
         val countriesList: ArrayList<String> = intent.getStringArrayListExtra(applicationContext.resources.getString(R.string.countriesListParcel))!!
         val currentContinent: Continent = intent.getSerializableExtra(applicationContext.resources.getString(R.string.continentName))!! as Continent
-        visitedCountries = FileUtils.importVisitedCountriesFromFile(resources.getString(R.string.countries_file), applicationContext)
+        visitedCountries = FileUtils.getVisitedCountriesFromFile(resources.getString(R.string.countries_file), applicationContext)
         resetContentView(currentContinent, countriesList)
         binding.saveView.setOnClickListener {
             FileUtils.saveVisitedCountriesToFile(visitedCountries, resources, applicationContext)

@@ -165,6 +165,8 @@ class MainActivity : AppCompatActivity() {
             }
             mainLayout.addView(childLayout)
         } else {
+            checkAndCreateFile(resources.getString(R.string.countries_file))
+            checkAndCreateFile(resources.getString(R.string.settings_file))
             startMainApp(mainLayout, otherSharedPref)
         }
 
@@ -198,22 +200,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun importSettings(){
         Log.d("MainActivity", "Importing settings from file")
-        val data = FileUtils.readFromFile(resources.getString(R.string.settings_file), this)
-        if (!data.isNullOrEmpty()) {
-            val settings = Gson().fromJson(data, JsonObject::class.java)
-            val version = settings.get("Version").asString
-            if(version == "1.0.0") {
-                countriesViewModel.setActiveSettings(extractSettingsFromJson(settings))
-            } else {
-                val e = Exception("Error reading file version for ${resources.getString(R.string.settings_file)}: $version")
-                FirebaseCrashlytics.getInstance().recordException(e)
-                Log.e("MainActivity", "Error reading file version for ${resources.getString(R.string.settings_file)}: $version")
-            }
-        } else {
-            val e = Exception("Failed to process settings file.")
-            FirebaseCrashlytics.getInstance().recordException(e)
-            Log.e("MainActivity", "Failed to process settings file.")
-        }
+        val settings = FileUtils.getSettingsFromFile(resources.getString(R.string.settings_file), this)
+        countriesViewModel.setActiveSettings(settings)
     }
 
     private fun refreshAllCountriesList(){
@@ -245,7 +233,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun importVisitedCountries(doValidate: Boolean){
         Log.d("MainActivity", "importing visited countries from file")
-        val visitedCountries = FileUtils.importVisitedCountriesFromFile(resources.getString(R.string.countries_file), this)
+        val visitedCountries = FileUtils.getVisitedCountriesFromFile(resources.getString(R.string.countries_file), this)
         countriesViewModel.setVisitedCountries(visitedCountries)
         if(doValidate){
             validateVisited()
@@ -359,8 +347,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupAdsAndAnalytics(otherSharedPref: SharedPreferences) {
-        val stopAnalytics = otherSharedPref.getBoolean(getString(R.string.stop_analytics), false)
-        val hideAds = otherSharedPref.getBoolean(getString(R.string.hide_ads), false)
+        val stopAnalytics = true//otherSharedPref.getBoolean(getString(R.string.stop_analytics), false)
+        val hideAds = true//otherSharedPref.getBoolean(getString(R.string.hide_ads), false)
 
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!stopAnalytics)
         FirebasePerformance.getInstance().isPerformanceCollectionEnabled = !stopAnalytics
